@@ -11,7 +11,7 @@ abstract class Function {
         }
  }
 
-class Sin extends Function{
+class F_Sin extends Function{
         @Override
         public double count(ArrayList<Double> args)
         {
@@ -20,7 +20,7 @@ class Sin extends Function{
 }
 
 
-class Cos extends Function
+class F_Cos extends Function
 {
         @Override
         public double count(ArrayList<Double> args)
@@ -28,7 +28,7 @@ class Cos extends Function
                 return Math.cos(args.get(0));
         }
 };
-class Tg extends Function
+class F_Tg extends Function
 {
         @Override
         public double count(ArrayList<Double> args)
@@ -42,7 +42,7 @@ class Tg extends Function
                 else return true;
         }
 };
-class Ctg extends Function
+class F_Ctg extends Function
 {
         @Override
         public double count(ArrayList<Double> args)
@@ -56,14 +56,14 @@ class Ctg extends Function
         }
 };
 
-class Abs extends Function
+class F_Abs extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
                 return Math.abs(args.get(0));
         }
 }
-class Arcsin extends Function
+class F_Arcsin extends Function
 {
 
         @Override
@@ -75,7 +75,7 @@ class Arcsin extends Function
                return (-1<=args.get(0) && args.get(0) <= 1);
         }
 }
-class Arccos extends Function
+class F_Arccos extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
@@ -87,25 +87,25 @@ class Arccos extends Function
                 return (-1<=args.get(0) && args.get(0) <= 1);
         }
 }
-class Arctg extends Function {
+class F_Arctg extends Function {
         @Override
         public double count(ArrayList<Double> args) {
                 return Math.atan(args.get(0));
         }
 }
-class Arcctg extends Function {
+class F_Arcctg extends Function {
         @Override
         public double count(ArrayList<Double> args) {
                 return Math.PI/2 - Math.atan(args.get(0));
         }
 }
-class Exp extends Function{
+class F_Exp extends Function{
         @Override
         public double count(ArrayList<Double> args) {
                 return Math.exp(args.get(0));
         }
 }
-class Ln extends Function
+class F_Ln extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
@@ -117,7 +117,7 @@ class Ln extends Function
                 return args.get(0) > 0;
         }
 }
-class Log extends Function
+class F_Log extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
@@ -128,7 +128,7 @@ class Log extends Function
                 return (args.get(0) != 1 && args.get(0) > 0 && args.get(1) > 0);
         }
 }
-class Pow extends Function
+class F_Pow extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
@@ -150,14 +150,14 @@ class Pow extends Function
 //                return false;
 //        }
 }
-class Mult extends Function
+class F_Mult extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
                 return args.get(0)*args.get(1);
         }
 }
-class Div extends Function
+class F_Div extends Function
 {
         @Override
         public double count(ArrayList<Double> args) {
@@ -168,13 +168,13 @@ class Div extends Function
                 return args.get(1) != 0;
         }
 }
-class Plus extends Function{
+class F_Plus extends Function{
         @Override
         public double count(ArrayList<Double> args) {
                 return args.get(0) + args.get(1);
         }
 }
-class Minus extends Function{
+class F_Minus extends Function{
         @Override
         public double count(ArrayList<Double> args) {
                 return args.get(0) - args.get(1);
