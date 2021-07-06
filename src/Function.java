@@ -9,7 +9,7 @@ abstract class Function {
         public Function(){
 
         }
-}
+ }
 
 class F_Sin extends Function{
         @Override
