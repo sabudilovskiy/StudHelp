@@ -6,6 +6,122 @@ public class Sentence {
     public Sentence()
     {
     };
+    public Sentence(String input, Archieve archieve)
+    {
+        int pos = 0;
+        int left_brs = 0;
+        int right_brs = 0;
+        while (pos < input.length())
+        {
+            while (pos < input.length() && input.charAt(pos) == ' ')pos++;
+            if (pos < input.length())
+            {
+                if (input.charAt(pos) == ',')
+                {
+                    this.add_lexeme(new Lexeme(Id_lexemes.COMMA));
+                    pos++;
+                }
+                else if (input.charAt(pos) == '(')
+                {
+                    left_brs++;
+                    this.add_lexeme(new Lexeme(Id_lexemes.LEFT_BR));
+                    pos++;
+                }
+                else if (input.charAt(pos) == ')')
+                {
+                    right_brs++;
+                    if (left_brs >= right_brs)
+                    {
+                        this.add_lexeme(new Lexeme(Id_lexemes.RIGHT_BR));
+                        pos++;
+                    }
+                    else
+                    {
+                        ErrorHandler.error = Id_errors.MORE_RIGHT_BRACKETS;
+                        return;
+                    }
+
+                }
+                else if (Support.is_numeral(input.charAt(pos)))
+                {
+                    String buffer = "";
+                    boolean use_point = false;
+                    while (pos < input.length() && (input.charAt(pos) == '.' || Support.is_numeral(input.charAt(pos))))
+                    {
+                        if (input.charAt(pos) == '.')
+                        {
+                            if (use_point == false)
+                            {
+                                use_point = true;
+                                buffer+=(input.charAt(pos++));
+                            }
+                            else
+                            {
+                                ErrorHandler.error = Id_errors.ERROR_SIGNS;
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            buffer+=input.charAt(pos++);
+                        }
+                    }
+                    ArrayList <Double> temp = new ArrayList<>();
+                    temp.add(Double.parseDouble(buffer));
+                    this.add_lexeme(new Lexeme(Id_lexemes.ARGUMENT, temp));
+                }
+                else
+                {
+                    String buffer = new String();
+                    ArrayList <Integer> a = new ArrayList<>();
+                    a.add(-1);
+                    int max_id = -1;
+                    int pos_max = pos;
+                    while (a.size() > 0 && pos < input.length())
+                    {
+                        buffer+=input.charAt(pos++);
+                        a = archieve.decode(buffer, null);
+                        for (int i = 0; i < a.size(); i++)
+                        {
+                            if (a.get(i) > 0)
+                            {
+                                max_id = a.get(i);
+                                pos_max = pos;
+                                break;
+                            }
+                        }
+                    }
+                    if (max_id == -1)
+                    {
+                        if (buffer.equals("x"))
+                        {
+                            this.add_lexeme(new Lexeme(Id_lexemes.X));
+                        }
+                        else
+                        {
+                            ErrorHandler.error = Id_errors.UNKNOWN_FUNCTION;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        pos = pos_max;
+                        this.add_lexeme(new Lexeme((Id_lexemes.get_by_id(max_id))));
+                    }
+                }
+            }
+        }
+        if (left_brs == right_brs)
+        {
+            this.add_lexeme(new Lexeme(Id_lexemes.END));
+            return;
+        }
+        else
+        {
+            ErrorHandler.error = Id_errors.HAVE_OPEN_BRACKETS;
+            return;
+        }
+    }
     Sentence(ArrayList <Lexeme> array)
     {
         for (Lexeme lexeme : array) add_lexeme(lexeme);
@@ -40,8 +156,8 @@ public class Sentence {
         {
             if (_array.get(i).get_id() == Id_lexemes.X)
             {
-                ArrayList <Double> x0 = new ArrayList<>(1);
-                x0.set(0,x);
+                ArrayList <Double> x0 = new ArrayList<>();
+                x0.add(x);
                 _array.set(i,new Lexeme(Id_lexemes.ARGUMENT, x0));
             }
         }
@@ -201,8 +317,12 @@ public class Sentence {
             //есть запятые
             else
             {
-                ArrayList <Sentence> A = new ArrayList<>(commas.size() + 1);
-                ArrayList <Double> values = new ArrayList<>(commas.size() + 1);
+                ArrayList <Sentence> A = new ArrayList<>();
+                ArrayList <Double> values = new ArrayList<>();
+                for (int i = 0; i < commas.size() + 1; i++ ) {
+                    A.add(new Sentence());
+                    values.add(0.0);
+                }
                 A.set(0,this.create_lexeme_vector(a + 1, commas.get(0) - 1));
                 for (int i = 1; i < commas.size(); i++)
                 {
