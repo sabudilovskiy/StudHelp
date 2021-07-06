@@ -1,66 +1,32 @@
 public enum Id_lexemes {
     //пре-унарные операторы, высший приоритет
-    ABS(1), SIN(2), COS(3), TG(4), CTG(5), ARCSIN(6), ARCCOS(7), ARCTG(8), ARCCTG(9), EXP(10), LN(11),
+    ABS, SIN, COS, TG, CTG, ARCSIN, ARCCOS, ARCTG, ARCCTG, EXP, LN,
     //псевдо пре-унарный оператор
-    LOG(12),
+    LOG,
     //пост-унарные операторы, приоритет: 2
-    FACTORIAL(13),
+    FACTORIAL,
     //бинарные операторы, приоритет: 3
-    POW(14),
+    POW,
     //бинарные операторы, приоритет: 4
-    MULT(15), DIV(16),
+    MULT, DIV,
     //бинарные операторы, низший приоритет
-    PLUS(17), MINUS(18),
+    PLUS, MINUS,
     //требуется для определения числа операторов
-    NUMBER_OPERATORS(19),
+    NUMBER_OPERATORS,
     //технические вещи
-    ARGUMENT(20), X(21), LEFT_BR(22), RIGHT_BR(23), COMMA(24), END(25);
-    private int base;
-    Id_lexemes(int base)
-    {
-        this.base = base;
+    ARGUMENT, X, LEFT_BR, RIGHT_BR, COMMA, END;
+
+
+    public static int getId(Id_lexemes lexeme) {
+        for (int i = 0; i < Id_lexemes.values().length; i++) {
+            if (lexeme == Id_lexemes.values()[i])
+                return i;
+        }
+        throw new NumberFormatException("No such element in enum");
     }
-    public int get() {
-        return base;
-    }
-    static public Id_lexemes get_by_id(int id){
-          switch (id) {
-              case 1:
-                  return ABS;
-              case 2:
-                  return SIN;
-              case 3:
-                  return COS;
-              case 4:
-                  return TG;
-              case 5:
-                  return CTG;
-              case 6:
-                  return ARCSIN;
-              case 7:
-                  return ARCCOS;
-              case 8:
-                  return ARCTG;
-              case 9:
-                  return ARCCTG;
-              case 10:
-                  return EXP;
-              case 11:
-                  return LN;
-              case 12:
-                  return LOG;
-              case 14:
-                  return POW;
-              case 15:
-                  return MULT;
-              case 16:
-                  return DIV;
-              case 17:
-                  return PLUS;
-              case 18:
-                  return MINUS;
-          }
-          ErrorHandler.error = Id_errors.UNKNOWN_ERROR;
-          return END;
+
+
+    static public Id_lexemes get_by_id(int id) {
+        return Id_lexemes.values()[id];
     }
 }

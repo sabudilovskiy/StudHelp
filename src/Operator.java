@@ -7,7 +7,7 @@ public class Operator {
     private int priority;
     private ArrayList<String> decode_base = new ArrayList<>();
     public int get_id(){
-        return id.get();
+        return Id_lexemes.getId(id);
     }
     public int get_left_argue()
     {
