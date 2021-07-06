@@ -17,4 +17,9 @@ public class Support {
         }
         else return right;
     }
+    static boolean is_numeral(char a)
+    {
+        if ('0' <= a && a <= '9') return true;
+	else return false;
+    }
 }

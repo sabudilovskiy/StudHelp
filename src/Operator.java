@@ -5,7 +5,7 @@ public class Operator {
     private int left_argue = 0;
     private int right_argue = 0;
     private int priority;
-    private ArrayList<String> decode_base;
+    private ArrayList<String> decode_base = new ArrayList<>();
     public int get_id(){
         return id.get();
     }
@@ -22,7 +22,7 @@ public class Operator {
         int max_code = 0;
         for (int i = 0; i < decode_base.size(); i++)
         {
-            if (decode_base.get(i).length() == input.length() && decode_base.get(i) == input) return 2;
+            if (decode_base.get(i).length() == input.length() && decode_base.get(i).equals(input)) return 2;
 			else if (decode_base.get(i).length() >= input.length())
         {
             int k = 1;

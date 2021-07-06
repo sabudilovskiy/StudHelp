@@ -1,9 +1,15 @@
 import java.util.ArrayList;
 
 public class Archieve {
-    ArrayList<Operator> base = new ArrayList<>(Id_lexemes.NUMBER_OPERATORS.get());
-    ArrayList<Function> functions = new ArrayList<Function>(Id_lexemes.NUMBER_OPERATORS.get());
+    ArrayList<Operator> base = new ArrayList<>();
+    ArrayList<Function> functions = new ArrayList<>();
     public Archieve(){
+        int n = Id_lexemes.NUMBER_OPERATORS.get();
+        for (int i = 0; i < n; i++)
+        {
+            base.add(new Operator());
+            functions.add(new Sin());
+        }
     }
     public void add_operator(Operator A, Function function)
     {
@@ -14,7 +20,7 @@ public class Archieve {
     ArrayList<Integer> decode(String input, ArrayList <Integer> verif)
     {
         ArrayList<Integer> answer = new ArrayList<>();
-        if (verif.size() != 0)
+        if (verif == null || verif.size() == 0)
         {
             for (int i = 0; i < Id_lexemes.NUMBER_OPERATORS.get(); i++)
             {

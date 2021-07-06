@@ -128,6 +128,28 @@ class Log extends Function
                 return (args.get(0) != 1 && args.get(0) > 0 && args.get(1) > 0);
         }
 }
+class Pow extends Function
+{
+        @Override
+        public double count(ArrayList<Double> args) {
+                return Math.pow(args.get(0), args.get(1));
+        }
+//        @Override
+//        public boolean check(ArrayList<Double> args) {
+//                if (args.get(0) > 0) return true;
+//                else
+//                {
+//                        if (args.get(1) - trunc(args.get(1)) == 0)
+//                        {
+//                                if (args.get(0) != 0 || args.get(1) >= 0)
+//                                {
+//                                        return true;
+//                                }
+//                        }
+//                }
+//                return false;
+//        }
+}
 class Mult extends Function
 {
         @Override

@@ -23,4 +23,44 @@ public enum Id_lexemes {
     public int get() {
         return base;
     }
+    static public Id_lexemes get_by_id(int id){
+          switch (id) {
+              case 1:
+                  return ABS;
+              case 2:
+                  return SIN;
+              case 3:
+                  return COS;
+              case 4:
+                  return TG;
+              case 5:
+                  return CTG;
+              case 6:
+                  return ARCSIN;
+              case 7:
+                  return ARCCOS;
+              case 8:
+                  return ARCTG;
+              case 9:
+                  return ARCCTG;
+              case 10:
+                  return EXP;
+              case 11:
+                  return LN;
+              case 12:
+                  return LOG;
+              case 14:
+                  return POW;
+              case 15:
+                  return MULT;
+              case 16:
+                  return DIV;
+              case 17:
+                  return PLUS;
+              case 18:
+                  return MINUS;
+          }
+          ErrorHandler.error = Id_errors.UNKNOWN_ERROR;
+          return END;
+    }
 }
