@@ -6,7 +6,7 @@ public class Archieve {
         int n = Id_lexemes.getId(Id_lexemes.NUMBER_OPERATORS);
         for (int i = 0; i < n; i++)
         {
-            base.add(new Operator());
+            base.add(new Sin());
         }
         add_operator( new Abs() );
         add_operator(new Sin());

@@ -64,6 +64,7 @@ public class Operator {
 class Abs extends Operator
 {
     Abs(){
+        id = Id_lexemes.ABS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Abs();
@@ -74,6 +75,7 @@ class Abs extends Operator
 }
 class Sin extends Operator{
     Sin(){
+        id = Id_lexemes.SIN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Sin();
@@ -83,6 +85,7 @@ class Sin extends Operator{
 }
 class Cos extends Operator{
     Cos(){
+        id = Id_lexemes.COS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Cos();
@@ -92,6 +95,7 @@ class Cos extends Operator{
 }
 class Tg extends Operator{
     Tg(){
+        id = Id_lexemes.TG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Tg();
@@ -102,6 +106,7 @@ class Tg extends Operator{
 }
 class Ctg extends Operator{
     Ctg(){
+        id = Id_lexemes.CTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Ctg();
@@ -113,6 +118,7 @@ class Ctg extends Operator{
 }
 class Arcsin extends Operator{
     Arcsin(){
+        id = Id_lexemes.ARCSIN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arcsin();
@@ -122,6 +128,7 @@ class Arcsin extends Operator{
 }
 class Arccos extends Operator{
     Arccos(){
+        id = Id_lexemes.ARCCOS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arccos();
@@ -131,6 +138,7 @@ class Arccos extends Operator{
 }
 class Arctg extends Operator{
     Arctg(){
+        id = Id_lexemes.ARCTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arctg();
@@ -141,6 +149,7 @@ class Arctg extends Operator{
 }
 class Arcctg extends Operator{
     Arcctg(){
+        id = Id_lexemes.ARCCTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arcctg();
@@ -152,6 +161,7 @@ class Arcctg extends Operator{
 }
 class Exp extends Operator{
     Exp(){
+        id = Id_lexemes.EXP;
         left_argue = 0;
         right_argue = 1;
         func = new F_Exp();
@@ -161,6 +171,7 @@ class Exp extends Operator{
 }
 class Ln extends Operator{
     Ln(){
+        id = Id_lexemes.LN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Ln();
@@ -170,6 +181,7 @@ class Ln extends Operator{
 }
 class Log extends Operator{
     Log(){
+        id = Id_lexemes.LOG;
         left_argue = 0;
         right_argue = 2;
         func = new F_Log();
@@ -179,6 +191,7 @@ class Log extends Operator{
 }
 class Pow extends Operator{
     Pow(){
+        id = Id_lexemes.POW;
         left_argue = 1;
         right_argue = 1;
         func = new F_Pow();
@@ -188,6 +201,7 @@ class Pow extends Operator{
 }
 class Mult extends Operator{
     Mult(){
+        id = Id_lexemes.MULT;
         left_argue = 1;
         right_argue = 1;
         func = new F_Mult();
@@ -197,6 +211,7 @@ class Mult extends Operator{
 }
 class Div extends Operator{
     Div(){
+        id = Id_lexemes.DIV;
         left_argue = 1;
         right_argue = 1;
         func = new F_Div();
@@ -206,6 +221,7 @@ class Div extends Operator{
 }
 class Minus extends Operator{
     Minus(){
+        id = Id_lexemes.MINUS;
         left_argue = 1;
         right_argue = 1;
         func = new F_Minus();
@@ -215,6 +231,7 @@ class Minus extends Operator{
 }
 class Plus extends Operator{
     Plus(){
+        id = Id_lexemes.PLUS;
         left_argue = 1;
         right_argue = 1;
         func = new F_Plus();

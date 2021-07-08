@@ -6,10 +6,6 @@ public class Main {
         double x;
         Lexeme answer;
         Archieve archieve = new Archieve();
-        {
-            //из-за специфики работы приоритетов, 0 - должен быть закреплён за отсутствием каких-либо операторов. Он - конец вычислений.
-            
-        }
         String input = "";
         Scanner printer = new Scanner(System.in);
         input = printer.nextLine();
