@@ -84,11 +84,11 @@ public class Archieve {
     boolean check_countable(Id_lexemes id, ArrayList <Double> argues)
     {
  
-        return functions.get(Id_lexemes.getId(id)).check(argues);
+        return base.get(Id_lexemes.getId(id)).check(argues);
     }
     double count(Id_lexemes id, ArrayList <Double> argues)
     {
-        return functions.get(Id_lexemes.getId(id)).count(argues);
+        return base.get(Id_lexemes.getId(id)).count(argues);
 
     }
 }
