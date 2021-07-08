@@ -1,5 +1,5 @@
 public enum Priority_operators {
-    PRIOR_PLUS_MINUS, PRIOR_MULT_DIV, PRIOR_POW, PRIOR_FUNC;
+    END, PRIOR_BOOL_FUNC, PRIOR_PLUS_MINUS, PRIOR_MULT_DIV, PRIOR_POW, PRIOR_FUNC;
 
     public static int getId(Priority_operators priority) {
         for (int i = 0; i < Priority_operators.values().length; i++) {

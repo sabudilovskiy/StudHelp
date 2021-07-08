@@ -45,6 +45,7 @@ public Lexeme(){
         else if(id==Id_lexemes.LEFT_BR) A+= "(";
         else if(id==Id_lexemes.RIGHT_BR) A+= ")";
         else if(id==Id_lexemes.X) A+= "x";
+        else if(id==Id_lexemes.END);
         else {
             A = archieve.code(id);
         }

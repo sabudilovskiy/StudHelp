@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-import static java.text.MessageFormat.Field.ARGUMENT;
 public class Sentence {
     private ArrayList <Lexeme> _array = new ArrayList<>();
     public Sentence()
@@ -242,7 +241,7 @@ public class Sentence {
         }
         return -1;
     }
-    boolean find_errors(Archieve archieve)
+    boolean have_errors( Archieve archieve)
     {
         int n = _array.size() - 1;
         if (archieve.get_left_argue(_array.get(0).get_id()) == 0 && archieve.get_right_argue(_array.get(n).get_id()) == 0)
@@ -293,116 +292,95 @@ public class Sentence {
         return false;
     }
     //посчитать значение предложения
-    Lexeme count(Archieve archieve)
-    {
+    Lexeme  count(Archieve archieve) {
         int a = find_left_br();
         while (a != -1) //избавляемся от скобок
         {
-            int b = find_right_bracket(a);
-            Sentence current = this.create_lexeme_vector(a + 1, b - 1);
-            ArrayList <Integer> commas = current.find_commas(a);
+            int b = find_right_bracket( a );
+            Sentence current = this.create_lexeme_vector( a + 1, b - 1 );
+            ArrayList<Integer> commas = current.find_commas( a );
             //в скобках выражение без запятых
-            if (commas.size() == 0)
-            {
-                Lexeme replace = current.count(archieve);
-                if (ErrorHandler.getError() == Id_errors.NON_ERROR)
-                {
-                    this.replace_sector(a, b, replace);
+            if (commas.size() == 0) {
+                Lexeme replace = current.count( archieve );
+                if (ErrorHandler.getError() == Id_errors.NON_ERROR) {
+                    this.replace_sector( a, b, replace );
                     this.code( archieve );
-                }
-                else
-                {
-                    return new Lexeme(Id_lexemes.END,  new ArrayList<Double>());
+                } else {
+                    return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                 }
             }
             //есть запятые
-            else
-            {
-                ArrayList <Sentence> A = new ArrayList<>();
-                ArrayList <Double> values = new ArrayList<>();
-                for (int i = 0; i < commas.size() + 1; i++ ) {
-                    A.add(new Sentence());
-                    values.add(0.0);
+            else {
+                ArrayList<Sentence> A = new ArrayList<>();
+                ArrayList<Double> values = new ArrayList<>();
+                for (int i = 0; i < commas.size() + 1; i++) {
+                    A.add( new Sentence() );
+                    values.add( 0.0 );
                 }
-                A.set(0,this.create_lexeme_vector(a + 1, commas.get(0) - 1));
-                for (int i = 1; i < commas.size(); i++)
-                {
-                    A.set(1,this.create_lexeme_vector(commas.get(i-1) + 1, commas.get(i) - 1)) ;
+                A.set( 0, this.create_lexeme_vector( a + 1, commas.get( 0 ) - 1 ) );
+                for (int i = 1; i < commas.size(); i++) {
+                    A.set( 1, this.create_lexeme_vector( commas.get( i - 1 ) + 1, commas.get( i ) - 1 ) );
                 }
-                A.set(A.size() - 1, this.create_lexeme_vector(commas.get(commas.size() - 1)+ 1, b - 1));
-                for (int i = 0; i < values.size(); i++)
-                {
-                    values.set(i, A.get(i).count(archieve).get_value());
-                    if (ErrorHandler.getError() != Id_errors.NON_ERROR)
-                    {
-                        return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
+                A.set( A.size() - 1, this.create_lexeme_vector( commas.get( commas.size() - 1 ) + 1, b - 1 ) );
+                for (int i = 0; i < values.size(); i++) {
+                    values.set( i, A.get( i ).count( archieve ).get_value() );
+                    if (ErrorHandler.getError() != Id_errors.NON_ERROR) {
+                        return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                     }
                 }
-                Lexeme replace = new Lexeme(Id_lexemes.ARGUMENT, values);
-                this.replace_sector(a, b, replace);
+                Lexeme replace = new Lexeme( Id_lexemes.ARGUMENT, values );
+                this.replace_sector( a, b, replace );
                 this.code( archieve );
             }
             a = find_left_br();
         }
-        if (find_errors(archieve) == true)
-        {
-            return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
+        if (have_errors( archieve ) == true) {
+            return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
         }
-        a = find_highest_priority(archieve);
-        while (a != 0)
-        {
-            int b = find_countable_operator(a, archieve);
-            while (b != -1)
-            {
-                int left = archieve.get_left_argue(_array.get(b).get_id());
-                int right = archieve.get_right_argue(_array.get(b).get_id());
+        a = find_highest_priority( archieve );
+        while (a != 0) {
+            int b = find_countable_operator( a, archieve );
+            while (b != -1) {
+                int left = archieve.get_left_argue( _array.get( b ).get_id() );
+                int right = archieve.get_right_argue( _array.get( b ).get_id() );
                 int l = left != 0 ? 1 : 0;
                 int r = right != 0 ? 1 : 0;
-                ArrayList <Double> left_argue = new ArrayList<>(), right_argue = new ArrayList<>();
-                if (l != 0)
-                {
-                    left_argue = _array.get(b-1).get_values();
-                    if (left != left_argue.size())
-                    {
+                ArrayList<Double> left_argue = new ArrayList<>(), right_argue = new ArrayList<>();
+                if (l != 0) {
+                    left_argue = _array.get( b - 1 ).get_values();
+                    if (left != left_argue.size()) {
                         ErrorHandler.setError( Id_errors.BAD_ARGUMENTS );
-                        return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
+                        return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                     }
                 }
-                if (r != 0)
-                {
-                    right_argue = _array.get(b + 1).get_values();
-                    if (right != right_argue.size())
-                    {
-                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS);
-                        return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
+                if (r != 0) {
+                    right_argue = _array.get( b + 1 ).get_values();
+                    if (right != right_argue.size()) {
+                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS );
+                        return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                     }
                 }
-                ArrayList <Double> argue = Support.union(left_argue, right_argue);
-                if (archieve.check_countable(_array.get(b).get_id(), argue))
-                {
-                    ArrayList <Double> x0 = new ArrayList<Double>();
-                    x0.add(archieve.count(_array.get(b).get_id(), argue));
-                    Lexeme replace = new Lexeme(Id_lexemes.ARGUMENT, x0);
-                    this.replace_sector(b - 1 * l , b + 1 * r, replace);
+                ArrayList<Double> argue = Support.union( left_argue, right_argue );
+                if (archieve.check_countable( _array.get( b ).get_id(), argue )) {
+                    ArrayList<Double> x0 = new ArrayList<Double>();
+                    x0.add( archieve.count( _array.get( b ).get_id(), argue ) );
+                    Lexeme replace = new Lexeme( Id_lexemes.ARGUMENT, x0 );
+                    this.replace_sector( b - 1 * l, b + 1 * r, replace );
+                } else {
+                    ErrorHandler.setError( Id_errors.IMPOSSIBLE_COUNT );
+                    return new Lexeme( Id_lexemes.END, new ArrayList<>() );
                 }
-                else
-                {
-                    ErrorHandler.setError(Id_errors.IMPOSSIBLE_COUNT);
-                    return new Lexeme(Id_lexemes.END, new ArrayList<>());
-                }
-                b = find_countable_operator(a, archieve);
+                b = find_countable_operator( a, archieve );
             }
-            a = find_highest_priority(archieve);
+            a = find_highest_priority( archieve );
         }
         this.code( archieve );
-        if (_array.size() == 2)
-        {
-            return _array.get(0);
+        if (_array.size() == 2 && _array.get( 0 ).get_id() == Id_lexemes.ARGUMENT && _array.get( 1 ).get_id() == Id_lexemes.END) {
+            return _array.get( 0 );
         }
-        else
-        {
-            ErrorHandler.setError(Id_errors.UNKNOWN_ERROR  );
-            return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
+        else{
+            ErrorHandler.setError( Id_errors.UNKNOWN_ERROR );
+            return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
         }
     }
     String code(Archieve archieve){
