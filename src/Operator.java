@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 
 public class Operator {
@@ -5,7 +6,7 @@ public class Operator {
     protected Function func = new F_Sin();
     protected int left_argue = 0;
     protected int right_argue = 0;
-    protected int priority;
+    protected int priority = 0;
     protected ArrayList<String> decode_base = new ArrayList<>();
     public int get_id(){
         return Id_lexemes.getId(id);
@@ -24,12 +25,9 @@ public class Operator {
         for (int i = 0; i < decode_base.size(); i++)
         {
             if (decode_base.get(i).length() == input.length() && decode_base.get(i).equals(input)) return 2;
-			else if (decode_base.get(i).length() >= input.length())
-        {
-            int k = 1;
-            for (int j = 0; j < input.length(); j++) if (decode_base.get(i).charAt(j) != input.charAt(j)) k = 0;
-            max_code = k;
-        }
+			else if (decode_base.get(i).length() >= input.length() && decode_base.get(i).startsWith(input)) {
+            max_code = 1;
+            }
         }
         return max_code;
     }
@@ -58,188 +56,226 @@ public class Operator {
     }
     Operator()
     {
-        priority = 0;
     }
     public String code(){
         return decode_base.get( 0 );
     }
+    protected void load_decode_base(String src){
+        if (src.equals ( "" )) return;
+        else {
+            try {
+                FileReader localisation_file = new FileReader (src);
+                BufferedReader scan = new BufferedReader ( localisation_file );
+                String line;
+                while ((line = scan.readLine ()) != null){
+                    if (line.equals ("")!=true) decode_base.add ( line );
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace ();
+            } catch (IOException e) {
+                e.printStackTrace ();
+            }
+        }
+
+    }
 }
-class Abs extends Operator
-{
+class Argument extends Operator{
+    Argument(){
+        id = Id_lexemes.ARGUMENT;
+    }
+}
+class Valuable extends Operator{
+    Valuable(){
+        id = Id_lexemes.VARIABLE;
+       load_decode_base ( "res\\decode\\functions\\valuable.txt" );
+    }
+}
+class Left_br extends Operator{
+    Left_br(){
+        id = Id_lexemes.LEFT_BR;
+        decode_base.add( "(" );
+    }
+}
+class Right_br extends Operator{
+    Right_br(){
+        id = Id_lexemes.RIGHT_BR;
+        decode_base.add( ")" );
+    }
+}
+class Comma extends Operator{
+    Comma(){
+        id = Id_lexemes.COMMA;
+        decode_base.add( "," );
+    }
+}
+class Abs extends Operator{
     Abs(){
+        load_decode_base ("res\\decode\\functions\\abs.txt");
         id = Id_lexemes.ABS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Abs();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "abs" );
     }
-
 }
 class Sin extends Operator{
     Sin(){
+        load_decode_base ("res\\decode\\functions\\sin.txt");
         id = Id_lexemes.SIN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Sin();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "sin" );
     }
 }
 class Cos extends Operator{
     Cos(){
+        load_decode_base ("res\\decode\\functions\\cos.txt");
         id = Id_lexemes.COS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Cos();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "cos" );
     }
 }
 class Tg extends Operator{
     Tg(){
+        load_decode_base ("res\\decode\\functions\\tg.txt");
         id = Id_lexemes.TG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Tg();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "tg" );
-        decode_base.add("tan");
     }
 }
 class Ctg extends Operator{
     Ctg(){
+        load_decode_base ("res\\decode\\functions\\ctg.txt");
         id = Id_lexemes.CTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Ctg();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "ctg" );
-        decode_base.add("cotan");
-        decode_base.add( "cot" );
     }
 }
 class Arcsin extends Operator{
     Arcsin(){
+        load_decode_base ("res\\decode\\functions\\arcsin.txt");
         id = Id_lexemes.ARCSIN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arcsin();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "arcsin" );
     }
 }
 class Arccos extends Operator{
     Arccos(){
+        load_decode_base ("res\\decode\\functions\\arccos.txt");
         id = Id_lexemes.ARCCOS;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arccos();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "arccos" );
     }
 }
 class Arctg extends Operator{
     Arctg(){
+        load_decode_base ("res\\decode\\functions\\arctg.txt");
         id = Id_lexemes.ARCTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arctg();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "arctg" );
-        decode_base.add("arctan");
     }
 }
 class Arcctg extends Operator{
     Arcctg(){
+        load_decode_base ("res\\decode\\functions\\arcctg.txt");
         id = Id_lexemes.ARCCTG;
         left_argue = 0;
         right_argue = 1;
         func = new F_Arcctg();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "arcctg" );
-        decode_base.add("arccotan");
-        decode_base.add( "arccot" );
     }
 }
 class Exp extends Operator{
     Exp(){
+        load_decode_base ("res\\decode\\functions\\exp.txt");
         id = Id_lexemes.EXP;
         left_argue = 0;
         right_argue = 1;
         func = new F_Exp();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "exp" );
     }
 }
 class Ln extends Operator{
     Ln(){
+        load_decode_base ("res\\decode\\functions\\ln.txt");
         id = Id_lexemes.LN;
         left_argue = 0;
         right_argue = 1;
         func = new F_Ln();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "ln" );
     }
 }
 class Log extends Operator{
     Log(){
+        load_decode_base ("res\\decode\\functions\\log.txt");
         id = Id_lexemes.LOG;
         left_argue = 0;
         right_argue = 2;
         func = new F_Log();
         priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
-        decode_base.add( "log" );
     }
 }
 class Pow extends Operator{
     Pow(){
+        load_decode_base ("res\\decode\\functions\\pow.txt");
         id = Id_lexemes.POW;
         left_argue = 1;
         right_argue = 1;
         func = new F_Pow();
         priority = Priority_operators.getId( Priority_operators.PRIOR_POW );
-        decode_base.add( "^" );
     }
 }
 class Mult extends Operator{
     Mult(){
+        load_decode_base ("res\\decode\\functions\\mult.txt");
         id = Id_lexemes.MULT;
         left_argue = 1;
         right_argue = 1;
         func = new F_Mult();
         priority = Priority_operators.getId( Priority_operators.PRIOR_MULT_DIV );
-        decode_base.add( "*" );
     }
 }
 class Div extends Operator{
     Div(){
+        load_decode_base ("res\\decode\\functions\\div.txt");
         id = Id_lexemes.DIV;
         left_argue = 1;
         right_argue = 1;
         func = new F_Div();
         priority = Priority_operators.getId( Priority_operators.PRIOR_MULT_DIV );
-        decode_base.add( "/" );
-    }
-}
-class Minus extends Operator{
-    Minus(){
-        id = Id_lexemes.MINUS;
-        left_argue = 1;
-        right_argue = 1;
-        func = new F_Minus();
-        priority = Priority_operators.getId( Priority_operators.PRIOR_PLUS_MINUS );
-        decode_base.add( "-" );
-        decode_base.add( "—" );
     }
 }
 class Plus extends Operator{
     Plus(){
+        load_decode_base ("res\\decode\\functions\\plus.txt");
         id = Id_lexemes.PLUS;
         left_argue = 1;
         right_argue = 1;
         func = new F_Plus();
         priority = Priority_operators.getId( Priority_operators.PRIOR_PLUS_MINUS );
-        decode_base.add( "+" );
+    }
+}
+class Minus extends Operator{
+    Minus(){
+        load_decode_base ("res\\decode\\functions\\minus.txt");
+        id = Id_lexemes.MINUS;
+        left_argue = 1;
+        right_argue = 1;
+        func = new F_Minus();
+        priority = Priority_operators.getId( Priority_operators.PRIOR_PLUS_MINUS );
     }
 }

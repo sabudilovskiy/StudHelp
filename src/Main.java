@@ -4,17 +4,17 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         double x;
+        new Archieve ();
         Lexeme answer;
-        Archieve archieve = new Archieve();
         String input = "";
         Scanner printer = new Scanner(System.in);
         input = printer.nextLine();
-        Sentence check = new Sentence(input, archieve);
-        System.out.println(check.code( archieve ));
+        Sentence check = new Sentence(input);
+        System.out.println(check.code());
         input = printer.nextLine();
         x = Double.parseDouble(input);
-        check.substitute(x);
-        answer = check.count(archieve);
+        check.substitute("x", x);
+        answer = check.count();
         if (ErrorHandler.getError() == Id_errors.NON_ERROR)
         {
             System.out.println(answer.get_value());
