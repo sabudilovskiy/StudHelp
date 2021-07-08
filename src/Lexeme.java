@@ -5,7 +5,7 @@ private Id_lexemes id;
 private ArrayList<Double> values = new ArrayList<>();
 public Lexeme(){
 
-    values.add(new Double(3));
+    values.add( 3.0 );
 }
     public Lexeme(Id_lexemes id, ArrayList<Double> values){
         this.values = values;
@@ -26,5 +26,28 @@ public Lexeme(){
     public ArrayList<Double> get_values()
     {
         return values;
+    }
+    public String code(Archieve archieve){
+        String A = "";
+        if (id==Id_lexemes.ARGUMENT) {
+            if (values.size() > 1) {
+                A+="(";
+                A+=values.get( 0 );
+                for (int i = 1; i < values.size(); i++) {
+                    A += ",";
+                    A += Double.toString( values.get( i ) );
+            }
+            }
+            else{
+                A+=Double.toString( values.get( 0 ) );
+            }
+        }
+        else if(id==Id_lexemes.LEFT_BR) A+= "(";
+        else if(id==Id_lexemes.RIGHT_BR) A+= ")";
+        else if(id==Id_lexemes.X) A+= "x";
+        else {
+            A = archieve.code(id);
+        }
+        return A;
     }
 }

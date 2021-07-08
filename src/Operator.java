@@ -60,6 +60,9 @@ public class Operator {
     {
         priority = 0;
     }
+    public String code(){
+        return decode_base.get( 0 );
+    }
 }
 class Abs extends Operator
 {
@@ -227,6 +230,7 @@ class Minus extends Operator{
         func = new F_Minus();
         priority = Priority_operators.getId( Priority_operators.PRIOR_PLUS_MINUS );
         decode_base.add( "-" );
+        decode_base.add( "—" );
     }
 }
 class Plus extends Operator{

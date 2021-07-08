@@ -24,7 +24,7 @@ public class Archieve {
         add_operator( new Mult() );
         add_operator( new Div() );
         add_operator( new Plus() );
-        add_operator( new Mult() );
+        add_operator( new Minus() );
     }
     public void add_operator(Operator A)
     {
@@ -66,6 +66,9 @@ public class Archieve {
             }
         }
         return answer;
+    }
+    String code(Id_lexemes id){
+        return base.get( Id_lexemes.getId( id ) ).code();
     }
     int get_priority(Id_lexemes id)
     {

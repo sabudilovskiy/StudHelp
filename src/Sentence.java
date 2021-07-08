@@ -37,7 +37,7 @@ public class Sentence {
                     }
                     else
                     {
-                        ErrorHandler.error = Id_errors.MORE_RIGHT_BRACKETS;
+                        ErrorHandler.setError(Id_errors.MORE_RIGHT_BRACKETS  );
                         return;
                     }
 
@@ -57,7 +57,7 @@ public class Sentence {
                             }
                             else
                             {
-                                ErrorHandler.error = Id_errors.ERROR_SIGNS;
+                                ErrorHandler.setError( Id_errors.ERROR_SIGNS );
                                 return;
                             }
                         }
@@ -99,7 +99,7 @@ public class Sentence {
                         }
                         else
                         {
-                            ErrorHandler.error = Id_errors.UNKNOWN_FUNCTION;
+                            ErrorHandler.setError( Id_errors.ERROR_SIGNS );
                             return;
                         }
                     }
@@ -118,7 +118,7 @@ public class Sentence {
         }
         else
         {
-            ErrorHandler.error = Id_errors.HAVE_OPEN_BRACKETS;
+            ErrorHandler.setError(Id_errors.HAVE_OPEN_BRACKETS  );
             return;
         }
     }
@@ -260,7 +260,7 @@ public class Sentence {
                     }
 					else
                     {
-                        ErrorHandler.error = Id_errors.MISS_ARGUMENT_BINARY_OPERATOR;
+                        ErrorHandler.setError( Id_errors.MISS_ARGUMENT_BINARY_OPERATOR  );
                         return true;
                     }
                 }
@@ -272,7 +272,7 @@ public class Sentence {
                 }
 					else
                 {
-                    ErrorHandler.error = Id_errors.MISS_ARGUMENT_POST_OPERATOR;
+                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_POST_OPERATOR );
                     return true;
                 }
             }
@@ -284,7 +284,7 @@ public class Sentence {
                 }
 					else
                 {
-                    ErrorHandler.error = Id_errors.MISS_ARGUMENT_PRE_OPERATOR;
+                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_PRE_OPERATOR );
                     return true;
                 }
             }
@@ -305,9 +305,10 @@ public class Sentence {
             if (commas.size() == 0)
             {
                 Lexeme replace = current.count(archieve);
-                if (ErrorHandler.error == Id_errors.NON_ERROR)
+                if (ErrorHandler.getError() == Id_errors.NON_ERROR)
                 {
                     this.replace_sector(a, b, replace);
+                    this.code( archieve );
                 }
                 else
                 {
@@ -332,13 +333,14 @@ public class Sentence {
                 for (int i = 0; i < values.size(); i++)
                 {
                     values.set(i, A.get(i).count(archieve).get_value());
-                    if (ErrorHandler.error != Id_errors.NON_ERROR)
+                    if (ErrorHandler.getError() != Id_errors.NON_ERROR)
                     {
                         return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
                     }
                 }
                 Lexeme replace = new Lexeme(Id_lexemes.ARGUMENT, values);
                 this.replace_sector(a, b, replace);
+                this.code( archieve );
             }
             a = find_left_br();
         }
@@ -362,7 +364,7 @@ public class Sentence {
                     left_argue = _array.get(b-1).get_values();
                     if (left != left_argue.size())
                     {
-                        ErrorHandler.error = Id_errors.BAD_ARGUMENTS;
+                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS );
                         return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
                     }
                 }
@@ -371,7 +373,7 @@ public class Sentence {
                     right_argue = _array.get(b + 1).get_values();
                     if (right != right_argue.size())
                     {
-                        ErrorHandler.error = Id_errors.BAD_ARGUMENTS;
+                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS);
                         return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
                     }
                 }
@@ -385,21 +387,30 @@ public class Sentence {
                 }
                 else
                 {
-                    ErrorHandler.error = Id_errors.IMPOSSIBLE_COUNT;
+                    ErrorHandler.setError(Id_errors.IMPOSSIBLE_COUNT);
                     return new Lexeme(Id_lexemes.END, new ArrayList<>());
                 }
                 b = find_countable_operator(a, archieve);
             }
             a = find_highest_priority(archieve);
         }
+        this.code( archieve );
         if (_array.size() == 2)
         {
             return _array.get(0);
         }
         else
         {
-            ErrorHandler.error = Id_errors.UNKNOWN_ERROR;
+            ErrorHandler.setError(Id_errors.UNKNOWN_ERROR  );
             return new Lexeme(Id_lexemes.END, new ArrayList<Double>());
         }
+    }
+    String code(Archieve archieve){
+        String A = "";
+        for (int i = 0; _array.get( i ).get_id() != Id_lexemes.END; i++) {
+            Lexeme cur_lexeme = _array.get( i );
+            A+= cur_lexeme.code(archieve);
+        }
+        return A;
     }
 }
