@@ -1,0 +1,2 @@
+arcsin
+asin

@@ -1,6 +1,6 @@
 public enum Id_lexemes {
     //пре-унарные операторы, высший приоритет
-    ABS, SIN, COS, TG, CTG, ARCSIN, ARCCOS, ARCTG, ARCCTG, EXP, LN,
+    ARGUMENT, VARIABLE, LEFT_BR, RIGHT_BR, COMMA, ABS, SIN, COS, TG, CTG, ARCSIN, ARCCOS, ARCTG, ARCCTG, EXP, LN,
     //псевдо пре-унарный оператор
     LOG,
     //пост-унарные операторы, приоритет: 2
@@ -14,8 +14,7 @@ public enum Id_lexemes {
     //требуется для определения числа операторов
     NUMBER_OPERATORS,
     //технические вещи
-    ARGUMENT, X, LEFT_BR, RIGHT_BR, COMMA, END;
-
+    END;
 
     public static int getId(Id_lexemes lexeme) {
         for (int i = 0; i < Id_lexemes.values().length; i++) {
