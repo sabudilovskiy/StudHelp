@@ -304,7 +304,6 @@ public class Sentence {
                 Lexeme replace = current.count( archieve );
                 if (ErrorHandler.getError() == Id_errors.NON_ERROR) {
                     this.replace_sector( a, b, replace );
-                    this.code( archieve );
                 } else {
                     return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                 }
@@ -330,7 +329,6 @@ public class Sentence {
                 }
                 Lexeme replace = new Lexeme( Id_lexemes.ARGUMENT, values );
                 this.replace_sector( a, b, replace );
-                this.code( archieve );
             }
             a = find_left_br();
         }
@@ -374,7 +372,6 @@ public class Sentence {
             }
             a = find_highest_priority( archieve );
         }
-        this.code( archieve );
         if (_array.size() == 2 && _array.get( 0 ).get_id() == Id_lexemes.ARGUMENT && _array.get( 1 ).get_id() == Id_lexemes.END) {
             return _array.get( 0 );
         }
