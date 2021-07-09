@@ -52,6 +52,7 @@ class Lexeme {
                     A += ",";
                     A += Double.toString ( values.get ( i ) );
                 }
+                A+= "(";
             } else {
                 A += Double.toString ( values.get ( 0 ) );
             }

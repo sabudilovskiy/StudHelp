@@ -3,60 +3,42 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        double x;
-        new Archieve ();
-        Lexeme answer;
-        String input = "";
-        Scanner printer = new Scanner(System.in);
-        input = printer.nextLine();
-        Sentence check = new Sentence(input);
-        System.out.println(check.code());
-        input = printer.nextLine();
-        x = Double.parseDouble(input);
-        check.substitute("x", x);
-        answer = check.count();
-        if (ErrorHandler.getError() == Id_errors.NON_ERROR)
-        {
-            System.out.println(answer.get_value());
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Введите количество аргументов: ");
+        int n = Integer.parseInt(scan.nextLine());
+        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<Double> values = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            System.out.println("Введите переменную: ");
+            keys.add( scan.nextLine());
+            System.out.println("Введите значение переменной: ");
+            values.add(Double.parseDouble(scan.nextLine()));
         }
-        else if (ErrorHandler.getError() == Id_errors.UNKNOWN_FUNCTION)
-        {
+        System.out.println("Введите функцию: ");
+        String input = scan.nextLine();
+        try {
+            System.out.println(MRV.count_lexemes(input, keys, values));
+        } catch (MRV_ARGUMENT_LIST_MISMATCH mrv_argument_list_mismatch) {
+            System.out.println("Списки аргументов не соответствуют.");
+        } catch (MRV_UNKNOWN_FUNCTION mrv_unknown_function) {
             System.out.println("Неизвестная функция.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.ERROR_SIGNS)
-        {
+        } catch (MRV_ERROR_SIGNS mrv_error_signs) {
             System.out.println("Какое-то из чисел записано с ошибкой: слишком много точек.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.IMPOSSIBLE_COUNT)
-        {
+        } catch (MRV_IMPOSSIBLE_COUNT mrv_impossible_count) {
             System.out.println("Функцию в заданной точке невозможно вычислить.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.MISS_ARGUMENT_BINARY_OPERATOR)
-        {
+        } catch (MRV_MISS_ARGUMENT_BINARY_OPERATOR mrv_miss_argument_binary_operator) {
             System.out.println("У какого-то из бинарных операторов отсутствует аргумент.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.MISS_ARGUMENT_PRE_OPERATOR)
-        {
+        } catch (MRV_MISS_ARGUMENT_PRE_OPERATOR mrv_miss_argument_pre_operator) {
             System.out.println("У какого-то из преоператоров отсутствует аргумент.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.MISS_ARGUMENT_POST_OPERATOR)
-        {
-            System.out.println("У какого-то из постоператоров отсутствует аргумент. ");
-        }
-        else if (ErrorHandler.getError() == Id_errors.HAVE_OPEN_BRACKETS)
-        {
+        } catch (MRV_MISS_ARGUMENT_POST_OPERATOR mrv_miss_argument_post_operator) {
+            System.out.println("У какого-то из постоператоров отсутствует аргумент.");
+        } catch (MRV_HAVE_OPEN_BRACKETS mrv_have_open_brackets) {
             System.out.println("Не все скобки закрыты.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.MORE_RIGHT_BRACKETS)
-        {
+        } catch (MRV_MORE_RIGHT_BRACKETS mrv_more_right_brackets) {
             System.out.println("Закрыто больше скобок, чем открыто.");
-        }
-        else if (ErrorHandler.getError() == Id_errors.BAD_ARGUMENTS)
-        {
+        } catch (MRV_BAD_ARGUMENTS mrv_bad_arguments) {
             System.out.println("У какого-то из операторов не соответствует число аргументов.");
-        }
-        else
-        {
+        } catch (MRV_UNKNOWN_ERROR mrv_unknown_error) {
             System.out.println("Неизвестная ошибка.");
         }
     }

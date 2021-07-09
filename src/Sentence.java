@@ -120,17 +120,22 @@ public class Sentence {
         _array.remove(i);
     }
     //заменить лексему x на значение
-    void substitute(String key, double x)
+    void substitute(ArrayList<String> keys, ArrayList<Double> values)
     {
-        for (int i = 0; i < _array.size(); i++)
-        {
-            if (_array.get(i).get_id() == Id_lexemes.VARIABLE && _array.get( i ).getKey().equals( key ))
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            double x = values.get(i);
+            for (int j = 0; j < _array.size(); j++)
             {
-                ArrayList <Double> x0 = new ArrayList<>();
-                x0.add(x);
-                _array.set(i,new Lexeme(Id_lexemes.ARGUMENT, x0));
+                if (_array.get(j).get_id() == Id_lexemes.VARIABLE && _array.get( j ).getKey().equals( key ))
+                {
+                    ArrayList <Double> x0 = new ArrayList<>();
+                    x0.add(x);
+                    _array.set(j,new Lexeme(Id_lexemes.ARGUMENT, x0));
+                }
             }
         }
+
     }
     //создать новое предложение из части старого
     Sentence create_lexeme_vector(int a, int b)

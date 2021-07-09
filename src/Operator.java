@@ -60,35 +60,35 @@ public class Operator {
     public String code(){
         return decode_base.get( 0 );
     }
-    protected void load_decode_base(String src){
-        if (src.equals ( "" )) return;
-        else {
-            try {
-                FileReader localisation_file = new FileReader (src);
-                BufferedReader scan = new BufferedReader ( localisation_file );
-                String line;
-                while ((line = scan.readLine ()) != null){
-                    if (line.equals ("")!=true) decode_base.add ( line );
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace ();
-            } catch (IOException e) {
-                e.printStackTrace ();
-            }
-        }
-
-    }
+//    protected void load_decode_base(String src){
+//        if (src.equals ( "" )) return;
+//        else {
+//            try {
+//                FileReader localisation_file = new FileReader (src);
+//                BufferedReader scan = new BufferedReader ( localisation_file );
+//                String line;
+//                while ((line = scan.readLine ()) != null){
+//                    if (line.equals ("")!=true) decode_base.add ( line );
+//                }
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace ();
+//            } catch (IOException e) {
+//                e.printStackTrace ();
+//            }
+//        }
+//
+//    }
 }
 class Argument extends Operator{
     Argument(){
         id = Id_lexemes.ARGUMENT;
     }
 }
-class Valuable extends Operator{
-    Valuable(){
+class Variable extends Operator{
+    Variable( ArrayList<String> decode_base){
         id = Id_lexemes.VARIABLE;
-       load_decode_base ( "res\\decode\\functions\\valuable.txt" );
+        this.decode_base = decode_base;
     }
 }
 class Left_br extends Operator{
@@ -111,7 +111,7 @@ class Comma extends Operator{
 }
 class Abs extends Operator{
     Abs(){
-        load_decode_base ("res\\decode\\functions\\abs.txt");
+        decode_base.add("abs");
         id = Id_lexemes.ABS;
         left_argue = 0;
         right_argue = 1;
@@ -121,7 +121,7 @@ class Abs extends Operator{
 }
 class Sin extends Operator{
     Sin(){
-        load_decode_base ("res\\decode\\functions\\sin.txt");
+        decode_base.add("sin");
         id = Id_lexemes.SIN;
         left_argue = 0;
         right_argue = 1;
@@ -131,7 +131,7 @@ class Sin extends Operator{
 }
 class Cos extends Operator{
     Cos(){
-        load_decode_base ("res\\decode\\functions\\cos.txt");
+        decode_base.add("cos");
         id = Id_lexemes.COS;
         left_argue = 0;
         right_argue = 1;
@@ -141,7 +141,8 @@ class Cos extends Operator{
 }
 class Tg extends Operator{
     Tg(){
-        load_decode_base ("res\\decode\\functions\\tg.txt");
+        decode_base.add("tg");
+        decode_base.add("tan");
         id = Id_lexemes.TG;
         left_argue = 0;
         right_argue = 1;
@@ -151,7 +152,9 @@ class Tg extends Operator{
 }
 class Ctg extends Operator{
     Ctg(){
-        load_decode_base ("res\\decode\\functions\\ctg.txt");
+        decode_base.add("ctg");
+        decode_base.add("cot");
+        decode_base.add("cotan");
         id = Id_lexemes.CTG;
         left_argue = 0;
         right_argue = 1;
@@ -161,7 +164,8 @@ class Ctg extends Operator{
 }
 class Arcsin extends Operator{
     Arcsin(){
-        load_decode_base ("res\\decode\\functions\\arcsin.txt");
+        decode_base.add("arcsin");
+        decode_base.add("asin");
         id = Id_lexemes.ARCSIN;
         left_argue = 0;
         right_argue = 1;
@@ -171,7 +175,8 @@ class Arcsin extends Operator{
 }
 class Arccos extends Operator{
     Arccos(){
-        load_decode_base ("res\\decode\\functions\\arccos.txt");
+        decode_base.add("arccos");
+        decode_base.add("acos");
         id = Id_lexemes.ARCCOS;
         left_argue = 0;
         right_argue = 1;
@@ -181,7 +186,10 @@ class Arccos extends Operator{
 }
 class Arctg extends Operator{
     Arctg(){
-        load_decode_base ("res\\decode\\functions\\arctg.txt");
+        decode_base.add("arctg");
+        decode_base.add("arctan");
+        decode_base.add("atg");
+        decode_base.add("atan");
         id = Id_lexemes.ARCTG;
         left_argue = 0;
         right_argue = 1;
@@ -191,17 +199,22 @@ class Arctg extends Operator{
 }
 class Arcctg extends Operator{
     Arcctg(){
-        load_decode_base ("res\\decode\\functions\\arcctg.txt");
-        id = Id_lexemes.ARCCTG;
-        left_argue = 0;
+        decode_base.add("arcctg");
+        decode_base.add("arccot");
+        decode_base.add("arccotan");
+        decode_base.add("actg");
+        decode_base.add("acot");
+        decode_base.add("acotan");
+        id          = Id_lexemes.ARCCTG;
+        left_argue  = 0;
         right_argue = 1;
-        func = new F_Arcctg();
-        priority = Priority_operators.getId( Priority_operators.PRIOR_FUNC );
+        func        = new F_Arcctg();
+        priority    = Priority_operators.getId(Priority_operators.PRIOR_FUNC);
     }
 }
 class Exp extends Operator{
     Exp(){
-        load_decode_base ("res\\decode\\functions\\exp.txt");
+        decode_base.add("exp");
         id = Id_lexemes.EXP;
         left_argue = 0;
         right_argue = 1;
@@ -211,7 +224,7 @@ class Exp extends Operator{
 }
 class Ln extends Operator{
     Ln(){
-        load_decode_base ("res\\decode\\functions\\ln.txt");
+        decode_base.add("ln");
         id = Id_lexemes.LN;
         left_argue = 0;
         right_argue = 1;
@@ -221,7 +234,7 @@ class Ln extends Operator{
 }
 class Log extends Operator{
     Log(){
-        load_decode_base ("res\\decode\\functions\\log.txt");
+        decode_base.add("log");
         id = Id_lexemes.LOG;
         left_argue = 0;
         right_argue = 2;
@@ -231,7 +244,7 @@ class Log extends Operator{
 }
 class Pow extends Operator{
     Pow(){
-        load_decode_base ("res\\decode\\functions\\pow.txt");
+       decode_base.add("^");
         id = Id_lexemes.POW;
         left_argue = 1;
         right_argue = 1;
@@ -241,7 +254,11 @@ class Pow extends Operator{
 }
 class Mult extends Operator{
     Mult(){
-        load_decode_base ("res\\decode\\functions\\mult.txt");
+        decode_base.add("*");
+        decode_base.add("×");
+        decode_base.add("⋅");
+        decode_base.add("∙");
+        decode_base.add("·");
         id = Id_lexemes.MULT;
         left_argue = 1;
         right_argue = 1;
@@ -251,7 +268,9 @@ class Mult extends Operator{
 }
 class Div extends Operator{
     Div(){
-        load_decode_base ("res\\decode\\functions\\div.txt");
+        decode_base.add("/");
+        decode_base.add("÷");
+        decode_base.add("∶");
         id = Id_lexemes.DIV;
         left_argue = 1;
         right_argue = 1;
@@ -261,7 +280,7 @@ class Div extends Operator{
 }
 class Plus extends Operator{
     Plus(){
-        load_decode_base ("res\\decode\\functions\\plus.txt");
+        decode_base.add("+");
         id = Id_lexemes.PLUS;
         left_argue = 1;
         right_argue = 1;
@@ -271,7 +290,10 @@ class Plus extends Operator{
 }
 class Minus extends Operator{
     Minus(){
-        load_decode_base ("res\\decode\\functions\\minus.txt");
+        decode_base.add("—");
+        decode_base.add("–");
+        decode_base.add("−");
+        decode_base.add("-");
         id = Id_lexemes.MINUS;
         left_argue = 1;
         right_argue = 1;
