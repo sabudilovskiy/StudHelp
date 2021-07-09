@@ -15,6 +15,7 @@ public class Sentence {
             while (pos < input.length() && input.charAt(pos) == ' ')pos++;
             if (pos < input.length())
             {
+                int begin = pos;
                 if (Support.is_numeral(input.charAt(pos)))
                 {
                     String buffer = "";
@@ -30,7 +31,7 @@ public class Sentence {
                             }
                             else
                             {
-                                ErrorHandler.setError( Id_errors.ERROR_SIGNS );
+                                ErrorHandler.setError( Id_errors.ERROR_SIGNS, pos, pos );
                                 return;
                             }
                         }
@@ -39,9 +40,12 @@ public class Sentence {
                             buffer+=input.charAt(pos++);
                         }
                     }
-                    ArrayList <Double> temp = new ArrayList<>();
-                    temp.add(Double.parseDouble(buffer));
-                    this.add_lexeme(new Lexeme(Id_lexemes.ARGUMENT, temp));
+                    ArrayList <Double> temp_array = new ArrayList<>();
+                    temp_array.add(Double.parseDouble(buffer));
+                    Lexeme temp = new Lexeme(Id_lexemes.ARGUMENT, temp_array);
+                    temp.setBegin (begin);
+                    temp.setEnd (pos - 1);
+                    this.add_lexeme(temp);
                 }
                 else
                 {
@@ -68,18 +72,30 @@ public class Sentence {
                     }
                     if (max_id == -1)
                     {
-                            ErrorHandler.setError( Id_errors.ERROR_SIGNS );
+                            int end = pos;
+                            ErrorHandler.setError( Id_errors.UNKNOWN_FUNCTION, begin, end);
                             return;
                     }
                     else
                     {
                         Id_lexemes id = Id_lexemes.get_by_id(max_id);
+                        Lexeme temp;
                         pos = pos_max;
-                        if (id != Id_lexemes.VARIABLE) this.add_lexeme(new Lexeme(id));
-                        else this.add_lexeme ( new Lexeme (max_buffer) );
+                        if (id != Id_lexemes.VARIABLE){
+                            temp = new Lexeme(id);
+                        }
+                        else {
+                            temp = new Lexeme (max_buffer);
+                        }
+                        temp.setBegin (begin);
+                        temp.setEnd (pos_max - 1);
+                        this.add_lexeme(temp);
                     }
                 }
             }
+        }
+        if (have_errors ()) {
+            return;
         }
         if (left_brs == right_brs)
         {
@@ -88,7 +104,8 @@ public class Sentence {
         }
         else
         {
-            ErrorHandler.setError(Id_errors.HAVE_OPEN_BRACKETS  );
+            int a = find_left_br ();
+            ErrorHandler.setError(Id_errors.HAVE_OPEN_BRACKETS,a, a );
             return;
         }
     }
@@ -120,17 +137,22 @@ public class Sentence {
         _array.remove(i);
     }
     //заменить лексему x на значение
-    void substitute(String key, double x)
+    void substitute(ArrayList<String> keys, ArrayList<Double> values)
     {
-        for (int i = 0; i < _array.size(); i++)
-        {
-            if (_array.get(i).get_id() == Id_lexemes.VARIABLE && _array.get( i ).getKey().equals( key ))
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            double x = values.get(i);
+            for (int j = 0; j < _array.size(); j++)
             {
-                ArrayList <Double> x0 = new ArrayList<>();
-                x0.add(x);
-                _array.set(i,new Lexeme(Id_lexemes.ARGUMENT, x0));
+                if (_array.get(j).get_id() == Id_lexemes.VARIABLE && _array.get( j ).getKey().equals( key ))
+                {
+                    ArrayList <Double> x0 = new ArrayList<>();
+                    x0.add(x);
+                    _array.set(j,new Lexeme(Id_lexemes.ARGUMENT, x0));
+                }
             }
         }
+
     }
     //создать новое предложение из части старого
     Sentence create_lexeme_vector(int a, int b)
@@ -230,7 +252,7 @@ public class Sentence {
                     }
 					else
                     {
-                        ErrorHandler.setError( Id_errors.MISS_ARGUMENT_BINARY_OPERATOR  );
+                        ErrorHandler.setError( Id_errors.MISS_ARGUMENT_BINARY_OPERATOR, _array.get (i)  );
                         return true;
                     }
                 }
@@ -242,7 +264,7 @@ public class Sentence {
                 }
 					else
                 {
-                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_POST_OPERATOR );
+                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_POST_OPERATOR, _array.get (i) );
                     return true;
                 }
             }
@@ -254,7 +276,7 @@ public class Sentence {
                 }
 					else
                 {
-                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_PRE_OPERATOR );
+                    ErrorHandler.setError( Id_errors.MISS_ARGUMENT_PRE_OPERATOR, _array.get (i) );
                     return true;
                 }
             }
@@ -303,9 +325,6 @@ public class Sentence {
             }
             a = find_left_br();
         }
-        if (have_errors() == true) {
-            return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
-        }
         a = find_highest_priority();
         while (a != 0) {
             int b = find_countable_operator(a);
@@ -318,14 +337,14 @@ public class Sentence {
                 if (l != 0) {
                     left_argue = _array.get( b - 1 ).get_values();
                     if (left != left_argue.size()) {
-                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS );
+                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS, _array.get (b) );
                         return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                     }
                 }
                 if (r != 0) {
                     right_argue = _array.get( b + 1 ).get_values();
                     if (right != right_argue.size()) {
-                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS );
+                        ErrorHandler.setError( Id_errors.BAD_ARGUMENTS, _array.get (b) );
                         return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
                     }
                 }
@@ -336,7 +355,7 @@ public class Sentence {
                     Lexeme replace = new Lexeme( Id_lexemes.ARGUMENT, x0 );
                     this.replace_sector( b - 1 * l, b + 1 * r, replace );
                 } else {
-                    ErrorHandler.setError( Id_errors.IMPOSSIBLE_COUNT );
+                    ErrorHandler.setError( Id_errors.IMPOSSIBLE_COUNT, _array.get (b) );
                     return new Lexeme( Id_lexemes.END, new ArrayList<>() );
                 }
                 b = find_countable_operator(a) ;
@@ -347,7 +366,7 @@ public class Sentence {
             return _array.get( 0 );
         }
         else{
-            ErrorHandler.setError( Id_errors.UNKNOWN_ERROR );
+            ErrorHandler.setError( Id_errors.UNKNOWN_ERROR, -1, -1 );
             return new Lexeme( Id_lexemes.END, new ArrayList<Double>() );
         }
     }

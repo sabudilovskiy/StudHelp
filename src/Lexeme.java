@@ -4,7 +4,8 @@ class Lexeme {
     protected String key;
     protected Id_lexemes id;
     protected ArrayList<Double> values = new ArrayList<> ();
-
+    protected int begin;
+    protected int end;
     public Lexeme() {
 
         values.add ( 3.0 );
@@ -52,6 +53,7 @@ class Lexeme {
                     A += ",";
                     A += Double.toString ( values.get ( i ) );
                 }
+                A+= "(";
             } else {
                 A += Double.toString ( values.get ( 0 ) );
             }
@@ -67,6 +69,21 @@ class Lexeme {
 
     public String getKey() {
         return key;
+    }
+
+    public int getBegin() {
+        return begin;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setBegin( int begin ) {
+        this.begin = begin;
+    }
+    public void setEnd( int end ) {
+        this.end = end;
     }
 }
 
