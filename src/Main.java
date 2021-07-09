@@ -16,30 +16,32 @@ public class Main {
         }
         System.out.println("Введите функцию: ");
         String input = scan.nextLine();
+        String temp=  "";
         try {
             System.out.println(MRV.count_lexemes(input, keys, values));
-        } catch (MRV_ARGUMENT_LIST_MISMATCH mrv_argument_list_mismatch) {
-            System.out.println("Списки аргументов не соответствуют.");
-        } catch (MRV_UNKNOWN_FUNCTION mrv_unknown_function) {
-            System.out.println("Неизвестная функция.");
-        } catch (MRV_ERROR_SIGNS mrv_error_signs) {
-            System.out.println("Какое-то из чисел записано с ошибкой: слишком много точек.");
-        } catch (MRV_IMPOSSIBLE_COUNT mrv_impossible_count) {
-            System.out.println("Функцию в заданной точке невозможно вычислить.");
-        } catch (MRV_MISS_ARGUMENT_BINARY_OPERATOR mrv_miss_argument_binary_operator) {
-            System.out.println("У какого-то из бинарных операторов отсутствует аргумент.");
-        } catch (MRV_MISS_ARGUMENT_PRE_OPERATOR mrv_miss_argument_pre_operator) {
-            System.out.println("У какого-то из преоператоров отсутствует аргумент.");
-        } catch (MRV_MISS_ARGUMENT_POST_OPERATOR mrv_miss_argument_post_operator) {
-            System.out.println("У какого-то из постоператоров отсутствует аргумент.");
-        } catch (MRV_HAVE_OPEN_BRACKETS mrv_have_open_brackets) {
-            System.out.println("Не все скобки закрыты.");
-        } catch (MRV_MORE_RIGHT_BRACKETS mrv_more_right_brackets) {
-            System.out.println("Закрыто больше скобок, чем открыто.");
-        } catch (MRV_BAD_ARGUMENTS mrv_bad_arguments) {
-            System.out.println("У какого-то из операторов не соответствует число аргументов.");
-        } catch (MRV_UNKNOWN_ERROR mrv_unknown_error) {
-            System.out.println("Неизвестная ошибка.");
+        } catch (MRV_ARGUMENT_LIST_MISMATCH error) {
+           temp = "Списки аргументов не соответствуют.";
+        } catch (MRV_UNKNOWN_FUNCTION error) {
+            temp = "Неизвестная функция от : " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
+        } catch (MRV_ERROR_SIGNS error) {
+             temp = "Какое-то из чисел записано с ошибкой: слишком много точек." + "Место ошибки: " + Integer.toString (error.getError_begin ());
+        } catch (MRV_IMPOSSIBLE_COUNT error) {
+             temp = "Функцию в заданной точке невозможно вычислить. Начало функции: " + Integer.toString (error.getError_begin ()) + " конец: " + Integer.toString (error.getError_end ());
+        } catch (MRV_MISS_ARGUMENT_BINARY_OPERATOR error) {
+           temp = "У какого-то из бинарных операторов отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
+        } catch (MRV_MISS_ARGUMENT_PRE_OPERATOR error) {
+            temp = "У какого-то из преоператоров отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
+        } catch (MRV_MISS_ARGUMENT_POST_OPERATOR error) {
+            temp = "У какого-то из постоператоров отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
+        } catch (MRV_HAVE_OPEN_BRACKETS error) {
+            temp = "Есть незакрытая скобка." + "Не закрыта: " + Integer.toString (error.getError_begin ());
+        } catch (MRV_MORE_RIGHT_BRACKETS error) {
+            temp = "Закрыто больше скобок, чем открыто.";
+        } catch (MRV_BAD_ARGUMENTS error) {
+            temp = "У какого-то операторов недостаточно или слишком много аргументов." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
+        } catch (MRV_UNKNOWN_ERROR error) {
+            temp = "Неизвестная ошибка.";
         }
+        System.out.println(temp);
     }
 }

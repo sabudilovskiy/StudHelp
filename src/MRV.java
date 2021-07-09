@@ -8,6 +8,8 @@ public class MRV {
         new Archieve (keys);
         Lexeme answer;
         Sentence sentence = new Sentence(input);
+        if ( ErrorHandler.getError () == Id_errors.ERROR_SIGNS ) throw new MRV_ERROR_SIGNS ();
+        else if ( ErrorHandler.getError () == Id_errors.UNKNOWN_FUNCTION ) throw new MRV_UNKNOWN_FUNCTION ();
         sentence.substitute(keys, values);
         answer = sentence.count();
         if (ErrorHandler.getError() == Id_errors.NON_ERROR)
@@ -57,44 +59,76 @@ public class MRV {
 
     }
 }
+class Func_Input_Exception extends Exception{
+    private int error_begin = -1;
+    private int error_end = -1;
+    Func_Input_Exception(){
 
-class MRV_ARGUMENT_LIST_MISMATCH extends Exception{
+    }
+    Func_Input_Exception(int begin, int end){
+        error_begin = begin;
+        error_end = end;
+    }
+    public int getError_begin() {
+        return error_begin;
+    }
+
+    public int getError_end() {
+        return error_end;
+    }
+}
+class MRV_ARGUMENT_LIST_MISMATCH extends Func_Input_Exception{
     public MRV_ARGUMENT_LIST_MISMATCH(){
     }
 }
-class MRV_UNKNOWN_FUNCTION extends Exception{
+class MRV_UNKNOWN_FUNCTION extends Func_Input_Exception{
     public MRV_UNKNOWN_FUNCTION(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
     }
 }
-class MRV_ERROR_SIGNS extends Exception{
+class MRV_ERROR_SIGNS extends Func_Input_Exception{
     public MRV_ERROR_SIGNS(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
     }
 }
-class MRV_IMPOSSIBLE_COUNT extends Exception{
+class MRV_IMPOSSIBLE_COUNT extends Func_Input_Exception{
     public MRV_IMPOSSIBLE_COUNT(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
     }
 }
-class MRV_BAD_ARGUMENTS extends Exception{
+class MRV_BAD_ARGUMENTS extends Func_Input_Exception{
     public MRV_BAD_ARGUMENTS(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
     }
 }
-class MRV_HAVE_OPEN_BRACKETS extends Exception{
-    MRV_HAVE_OPEN_BRACKETS(){}}
-class MRV_MORE_RIGHT_BRACKETS extends Exception{
+class MRV_HAVE_OPEN_BRACKETS extends Func_Input_Exception{
+    MRV_HAVE_OPEN_BRACKETS(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
+    }}
+class MRV_MORE_RIGHT_BRACKETS extends Func_Input_Exception{
     public MRV_MORE_RIGHT_BRACKETS(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
     }
 }
-class MRV_MISS_ARGUMENT_BINARY_OPERATOR extends Exception{
-    public MRV_MISS_ARGUMENT_BINARY_OPERATOR(){}
+class MRV_MISS_ARGUMENT_BINARY_OPERATOR extends Func_Input_Exception{
+    public MRV_MISS_ARGUMENT_BINARY_OPERATOR(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
+    }
 }
-class MRV_MISS_ARGUMENT_POST_OPERATOR extends Exception{
-    public MRV_MISS_ARGUMENT_POST_OPERATOR(){}
+class MRV_MISS_ARGUMENT_POST_OPERATOR extends Func_Input_Exception{
+    public MRV_MISS_ARGUMENT_POST_OPERATOR(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
+    }
 }
-class MRV_MISS_ARGUMENT_PRE_OPERATOR extends Exception{
-    public MRV_MISS_ARGUMENT_PRE_OPERATOR(){}
+class MRV_MISS_ARGUMENT_PRE_OPERATOR extends Func_Input_Exception{
+    public MRV_MISS_ARGUMENT_PRE_OPERATOR(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
+    }
 }
-class MRV_UNKNOWN_ERROR extends Exception{
-    public MRV_UNKNOWN_ERROR(){}
+class MRV_UNKNOWN_ERROR extends Func_Input_Exception{
+    public MRV_UNKNOWN_ERROR(){
+        super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
+    }
 }
 
 
