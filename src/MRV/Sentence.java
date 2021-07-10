@@ -1,3 +1,5 @@
+package MRV;
+
 import java.util.ArrayList;
 
 public class Sentence {
@@ -142,7 +144,7 @@ public class Sentence {
         _array.remove(i);
     }
     //заменить лексему x на значение
-    void substitute(ArrayList<String> keys, ArrayList<Double> values)
+    public void substitute(ArrayList<String> keys, ArrayList<Double> values)
     {
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
@@ -290,7 +292,7 @@ public class Sentence {
         return false;
     }
     //посчитать значение предложения
-    Lexeme  count() {
+    public Lexeme count() {
         int a = find_left_br();
         while (a != -1) //избавляемся от скобок
         {

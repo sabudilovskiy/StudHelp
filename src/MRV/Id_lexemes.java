@@ -1,3 +1,5 @@
+package MRV;
+
 public enum Id_lexemes {
     //пре-унарные операторы, высший приоритет
     ARGUMENT, VARIABLE, LEFT_BR, RIGHT_BR, COMMA, ABS, SIN, COS, TG, CTG, ARCSIN, ARCCOS, ARCTG, ARCCTG, EXP, LN,

@@ -1,3 +1,5 @@
+import MRV.MRV;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,27 +21,27 @@ public class Main {
         String temp=  "";
         try {
             System.out.println(MRV.count_lexemes(input, keys, values));
-        } catch (MRV_ARGUMENT_LIST_MISMATCH error) {
+        } catch (MRV.ARGUMENT_LIST_MISMATCH error) {
            temp = "Списки аргументов не соответствуют.";
-        } catch (MRV_UNKNOWN_FUNCTION error) {
+        } catch (MRV.UNKNOWN_FUNCTION error) {
             temp = "Неизвестная функция от : " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
-        } catch (MRV_ERROR_SIGNS error) {
+        } catch (MRV.ERROR_SIGNS error) {
              temp = "Какое-то из чисел записано с ошибкой: слишком много точек." + "Место ошибки: " + Integer.toString (error.getError_begin ());
-        } catch (MRV_IMPOSSIBLE_COUNT error) {
+        } catch (MRV.IMPOSSIBLE_COUNT error) {
              temp = "Функцию в заданной точке невозможно вычислить. Начало функции: " + Integer.toString (error.getError_begin ()) + " конец: " + Integer.toString (error.getError_end ());
-        } catch (MRV_MISS_ARGUMENT_BINARY_OPERATOR error) {
+        } catch (MRV.MISS_ARGUMENT_BINARY_OPERATOR error) {
            temp = "У какого-то из бинарных операторов отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
-        } catch (MRV_MISS_ARGUMENT_PRE_OPERATOR error) {
+        } catch (MRV.MISS_ARGUMENT_PRE_OPERATOR error) {
             temp = "У какого-то из преоператоров отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
-        } catch (MRV_MISS_ARGUMENT_POST_OPERATOR error) {
+        } catch (MRV.MISS_ARGUMENT_POST_OPERATOR error) {
             temp = "У какого-то из постоператоров отсутствует аргумент." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
-        } catch (MRV_HAVE_OPEN_BRACKETS error) {
+        } catch (MRV.HAVE_OPEN_BRACKETS error) {
             temp = "Есть незакрытая скобка." + "Не закрыта: " + Integer.toString (error.getError_begin ());
-        } catch (MRV_MORE_RIGHT_BRACKETS error) {
+        } catch (MRV.MORE_RIGHT_BRACKETS error) {
             temp = "Закрыто больше скобок, чем открыто.";
-        } catch (MRV_BAD_ARGUMENTS error) {
+        } catch (MRV.BAD_ARGUMENTS error) {
             temp = "У какого-то операторов недостаточно или слишком много аргументов." + "Ошибка от: " + Integer.toString (error.getError_begin ()) + " до: " + Integer.toString (error.getError_end ());
-        } catch (MRV_UNKNOWN_ERROR error) {
+        } catch (MRV.UNKNOWN_ERROR error) {
             temp = "Неизвестная ошибка.";
         }
         System.out.println(temp);

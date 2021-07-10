@@ -1,6 +1,8 @@
+package MRV;
+
 import java.util.ArrayList;
 
-class Lexeme {
+public class Lexeme {
     protected String key;
     protected Id_lexemes id;
     protected ArrayList<Double> values = new ArrayList<> ();
