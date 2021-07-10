@@ -8,8 +8,6 @@ public class Sentence {
     public Sentence(String input)
     {
         int pos = 0;
-        int left_brs = 0;
-        int right_brs = 0;
         while (pos < input.length())
         {
             while (pos < input.length() && input.charAt(pos) == ' ')pos++;
@@ -92,6 +90,16 @@ public class Sentence {
                         this.add_lexeme(temp);
                     }
                 }
+            }
+        }
+        int left_brs = 0, right_brs = 0;
+        for (int i = 0; i < _array.size (); i++)
+        {
+            if (_array.get (i).get_id () == Id_lexemes.LEFT_BR) left_brs++;
+            else if(_array.get (i).get_id () == Id_lexemes.RIGHT_BR) right_brs++;
+            if (right_brs > left_brs){
+                ErrorHandler.setError (Id_errors.MORE_RIGHT_BRACKETS, _array.get (i));
+                return;
             }
         }
         if (left_brs == right_brs)
