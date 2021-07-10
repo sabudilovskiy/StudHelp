@@ -94,9 +94,6 @@ public class Sentence {
                 }
             }
         }
-        if (have_errors ()) {
-            return;
-        }
         if (left_brs == right_brs)
         {
             this.add_lexeme(new Lexeme(Id_lexemes.END));
@@ -324,6 +321,9 @@ public class Sentence {
                 this.replace_sector( a, b, replace );
             }
             a = find_left_br();
+        }
+        if (have_errors ()) {
+            return new Lexeme (Id_lexemes.END);
         }
         a = find_highest_priority();
         while (a != 0) {
