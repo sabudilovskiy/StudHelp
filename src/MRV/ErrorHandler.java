@@ -24,4 +24,9 @@ public class ErrorHandler {
     public static int get_end_error(){
         return end_error;
     }
+    public static void set_default(){
+        error = Id_errors.NON_ERROR;
+        begin_error = -1;
+        end_error = -1;
+    }
 }

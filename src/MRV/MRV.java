@@ -8,6 +8,7 @@ public class MRV {
             throw new MRV.ARGUMENT_LIST_MISMATCH ();
         }
         new Archieve (keys);
+        ErrorHandler.set_default ();
         Lexeme answer;
         Sentence sentence = new Sentence(input);
         if ( ErrorHandler.getError () == Id_errors.ERROR_SIGNS ) throw new MRV.ERROR_SIGNS ();
