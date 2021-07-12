@@ -1,4 +1,4 @@
-package MRV;
+package Lexemes;
 
 public enum Id_lexemes {
     //пре-унарные операторы, высший приоритет

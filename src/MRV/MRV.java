@@ -1,5 +1,7 @@
 package MRV;
 
+import Lexemes.*;
+
 import java.util.ArrayList;
 
 public class MRV {
