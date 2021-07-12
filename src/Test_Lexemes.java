@@ -3,7 +3,7 @@ import MRV.MRV;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class Test_Lexemes {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int n;

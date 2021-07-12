@@ -64,13 +64,13 @@ public class MRV {
 
     }
 
-    static class Func_Input_Exception extends Exception{
+    static class Lexemes_Exception extends Exception{
         private int error_begin = -1;
         private int error_end = -1;
-        Func_Input_Exception(){
+        Lexemes_Exception(){
     
         }
-        Func_Input_Exception(int begin, int end){
+            Lexemes_Exception( int begin, int end){
             error_begin = begin;
             error_end = end;
         }
@@ -83,68 +83,80 @@ public class MRV {
         }
     }
 
-    public static class ARGUMENT_LIST_MISMATCH extends Func_Input_Exception {
+    public static class ARGUMENT_LIST_MISMATCH extends MRV.MRV.Lexemes_Exception {
         public ARGUMENT_LIST_MISMATCH(){
         }
     }
 
-    public static class BAD_ARGUMENTS extends Func_Input_Exception {
+    public static class BAD_ARGUMENTS extends MRV.MRV.Lexemes_Exception {
         public BAD_ARGUMENTS(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class ERROR_SIGNS extends Func_Input_Exception {
+    public static class ERROR_SIGNS extends MRV.MRV.Lexemes_Exception {
         public ERROR_SIGNS(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class HAVE_OPEN_BRACKETS extends Func_Input_Exception {
+    public static class HAVE_OPEN_BRACKETS extends MRV.MRV.Lexemes_Exception {
         HAVE_OPEN_BRACKETS(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }}
 
-    public static class IMPOSSIBLE_COUNT extends Func_Input_Exception {
+    public static class IMPOSSIBLE_COUNT extends MRV.MRV.Lexemes_Exception {
         public IMPOSSIBLE_COUNT(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class MISS_ARGUMENT_BINARY_OPERATOR extends Func_Input_Exception {
+    public static class MISS_ARGUMENT_BINARY_OPERATOR extends MRV.MRV.Lexemes_Exception {
         public MISS_ARGUMENT_BINARY_OPERATOR(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class MISS_ARGUMENT_POST_OPERATOR extends Func_Input_Exception {
+    public static class MISS_ARGUMENT_POST_OPERATOR extends MRV.MRV.Lexemes_Exception {
         public MISS_ARGUMENT_POST_OPERATOR(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class MISS_ARGUMENT_PRE_OPERATOR extends Func_Input_Exception {
+    public static class MISS_ARGUMENT_PRE_OPERATOR extends MRV.MRV.Lexemes_Exception {
         public MISS_ARGUMENT_PRE_OPERATOR(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class MORE_RIGHT_BRACKETS extends Func_Input_Exception {
+    public static class MORE_RIGHT_BRACKETS extends MRV.MRV.Lexemes_Exception {
         public MORE_RIGHT_BRACKETS(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class UNKNOWN_ERROR extends Func_Input_Exception {
+    public static class UNKNOWN_ERROR extends MRV.MRV.Lexemes_Exception {
         public UNKNOWN_ERROR(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
     }
 
-    public static class UNKNOWN_FUNCTION extends Func_Input_Exception {
+    public static class UNKNOWN_FUNCTION extends MRV.MRV.Lexemes_Exception {
         public UNKNOWN_FUNCTION(){
             super(ErrorHandler.get_begin_error(), ErrorHandler.get_end_error());
         }
+    }
+
+    static class MATRIX_ERROR extends Exception{
+    }
+
+    public static class NON_QUADRATIC_MATRIX extends MATRIX_ERROR{
+    }
+    public static class DEGENERATE_MATRIX extends MATRIX_ERROR{
+    }
+    public static class MATRIX_DIMENSION_MISSMATCH extends MATRIX_ERROR{
+    }
+    public static class INVALID_NUMBER_STRING extends MATRIX_ERROR{
     }
 }
 
