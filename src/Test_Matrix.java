@@ -23,9 +23,9 @@ public class Test_Matrix {
         }
         Matrix temp = new Matrix (arr);
         try {
-            System.out.println ("Определитель, посчитанный методом гаусса " + temp.det_with_gauss ());
+            System.out.println ("Определитель равен " + temp.determinant ());
             Log.print_log ();
-        } catch (MRV.INVALID_NUMBER_STRING ignored) {
+        } catch (MRV.INVALID_NUMBER_STRING | MRV.NON_QUADRATIC_MATRIX ignored) {
         }
     }
 }
