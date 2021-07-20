@@ -15,8 +15,8 @@ public class Log {
     }
     public static void print_log(){
         for (int i = 0; i < objects.size (); i++){
-            System.out.println (objects.get (i));
             System.out.println (commits.get (i));
+            System.out.println (objects.get (i));
         }
     }
 }

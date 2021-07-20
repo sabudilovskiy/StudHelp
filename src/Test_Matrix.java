@@ -1,9 +1,8 @@
 import Logger.Log;
 import MRV.MRV;
 import Matrix.Matrix;
-import Matrix.Matrix_Settings;
+import Matrix.Det_Settings;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Test_Matrix {
@@ -24,7 +23,8 @@ public class Test_Matrix {
         }
         Matrix temp = new Matrix (arr);
         try {
-            Matrix_Settings.setdefaultSettings();
+            Det_Settings.setdefaultSettings();
+            Det_Settings.setBorder (4);
             System.out.println ("Определитель равен " + temp.determinant ());
             Log.print_log ();
         } catch (MRV.INVALID_NUMBER_STRING | MRV.NON_QUADRATIC_MATRIX ignored) {

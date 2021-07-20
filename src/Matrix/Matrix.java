@@ -41,6 +41,7 @@ public class Matrix extends Logger {
     protected void summ_strings( int a, int b, double k) throws MRV.INVALID_NUMBER_STRING {
         if (0<= a && a <= m && 0 <= b && b <= m) {
             for (int i = 0; i < n; i++) arr[a][i] += k*arr[b][i];
+            log_this ("Прибавляем к " + (a+1) + " строке " + (b+1) + " строку, умноженную на " + k);
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
@@ -100,36 +101,10 @@ public class Matrix extends Logger {
     }
     public void gauss_transformation() throws MRV.INVALID_NUMBER_STRING {
         int local_m = m;
-        log_this ("Для того, чтобы преобразовать матрицу методом Гаусса необходимо постепенно, столбец за столбцом путём вычитания верхних строк из нижних добиваться появления нулей под главной диагональю. \n Коэффициент, с которым нужно прибавлять верхнюю строку высчитывается следующим образом: элемент под главной диагональю разделить на элемент на главной диагонали. /n");
-        for (int i = 0; i < local_m - 1; i++) {
-            int f = find_non_zero_in_column (i,i);
-            if (arr[i][i] != 0 && f != -1) {
-                for (int j = i + 1; j < m; j++){
-                    Log.add("k" + j + "= -a" + j + i + " / a" + i + i + "=" + -arr[j][i] + " / " + arr[i][i] + " = " + -arr[j][i]/arr[i][i], "");
-                    double k = -arr[j][i]/arr[i][i];
-                    summ_strings (j, i, k);
-                }
-                log_this ("Обнуляем " + i + " столбец при помощи сложения строчек с "  +  i  +" строчкей, умноженной на посчитанные выше коэффициенты");
-            }
-            else if(f==-1){
-                Log.add ("Так как " + i + " столбец ниже главной диагонали уже обнулён, то ничего не делаем", "");
-            }
-            else {
-                if(is_null_string (i))
-                {
-                    move_string_to_end (i);
-                    log_this ("Получилось, что " + i + " строка является нулевой. Смещаем её вниз." );
-                    i--;
-                }
-                else{
-                    swap_strings (i,f);
-                    log_this ("Так как " + i + " строчка имеет ноль на главной диагонали, то мы её поменяли с нижней, у которой нет нуля на главной диагонали");
-                }
-            }
-        }
+        log_this ("Для того, чтобы преобразовать матрицу методом Гаусса необходимо сначала сделать матрицу верхнетреугольной.");
+        triangular_transformation ();
         log_this ("Мы добились того, что под главной диагональю одни нули. Осталось добиться того же над главной диагональю, где это возможно");
-        local_m = m;
-        for (int i =  local_m - 1; i > 0; i--) {
+        for (int i = m - 1; i > 0; i--) {
             int f = find_non_zero_in_column (i,0);
             if (arr[i][i] != 0 && f != i && f!= -1) {
                 for (int j = i - 1; j >= 0; j--){
@@ -137,10 +112,40 @@ public class Matrix extends Logger {
                     double k = -arr[j][i]/arr[i][i];
                     summ_strings (j, i, k);
                 }
-                log_this ("Обнуляем " + i + " столбец при помощи сложения строчек с "  +  i  +" строчкей, умноженной на посчитанные выше коэффициенты");
+                log_this ("Обнуляем " + (i+1) + " столбец при помощи сложения строчек с "  +  (i+1)  +" строчкей, умноженной на посчитанные выше коэффициенты");
             }
             else if(f==i || f==-1){
-                Log.add ("Так как " + i + " столбец выше главной диагонали уже обнулён, то ничего не делаем", "");
+                Log.add ("Так как " + (i+1) + " столбец выше главной диагонали уже обнулён, то ничего не делаем", "");
+            }
+        }
+    }
+    public void triangular_transformation() throws MRV.INVALID_NUMBER_STRING {
+        int local_m = m;
+        log_this ("Для того, чтобы привести матрицу к верхнетреугольному(трапециевидному) виду необходимо постепенно, столбец за столбцом путём вычитания верхних строк из нижних добиваться появления нулей под главной диагональю.");
+        for (int i = 0; i < local_m - 1; i++) {
+            int f = find_non_zero_in_column (i,i);
+            if (arr[i][i] != 0 && f != -1) {
+                for (int j = i + 1; j < m; j++){
+                    Log.add("k" + (j+1) + "= -a" + (j+1) + (i+1) + " / a" + (i+1) + (i+1) + "=" + -arr[j][i] + " / " + arr[i][i] + " = " + -arr[j][i]/arr[i][i], "");
+                    double k = -arr[j][i]/arr[i][i];
+                    summ_strings (j, i, k);
+                }
+
+            }
+            else if(f==-1){
+                Log.add ("Так как " + (i+1) + " столбец ниже главной диагонали уже обнулён, то ничего не делаем", "");
+            }
+            else {
+                if(is_null_string (i))
+                {
+                    move_string_to_end (i);
+                    log_this ("Получилось, что " + (i+1) + " строка является нулевой. Смещаем её вниз." );
+                    i--;
+                }
+                else{
+                    swap_strings (i,f);
+                    log_this ("Так как " + (i+1) + " строчка имеет ноль на главной диагонали, то мы её поменяли с нижней, у которой нет нуля на главной диагонали");
+                }
             }
         }
     }
@@ -190,11 +195,12 @@ public class Matrix extends Logger {
     protected double algebraic_complement (int a, int b) throws MRV.INVALID_NUMBER_STRING, MRV.NON_QUADRATIC_MATRIX {
         if (0 <= a && a <= m && 0 <= b && b <= n){
             Log.add("", "Для вычисления алгебраического дополнения необходимо умножить -1 в степени суммы индексов элемента на его минор.");
+            Log.add("", "Найдём A" + (a+1) + (b+1));
             Matrix minor = minor (a, b);
-            Log.add("","Получаем минор вычеркнув " + a + " строку и " + b + " столбец. Вычислим его определитель.");
+            Log.add("","Получаем минор вычеркнув " + (a+1) + " строку и " + (b+1) + " столбец. Вычислим его определитель.");
             double minor_determinant = minor.determinant ();
             double value = Math.pow (-1, a + b) * minor_determinant;
-            Log.add("A" + a + b + " = " + minor_determinant + "*" + "-1^(" + a + "+" + b + ") = " + value, "");
+            Log.add("A" + (a+1) + (b+1) + " = " + minor_determinant + "*" + "-1^(" + (a+1) + "+" + (b+1) + ") = " + value, "");
             return value;
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
@@ -202,12 +208,12 @@ public class Matrix extends Logger {
     public double determinant() throws MRV.NON_QUADRATIC_MATRIX, MRV.INVALID_NUMBER_STRING {
         if (m == n){
             try {
-                det_methods cur_method = Matrix_Settings.get_method (m);
+                det_methods cur_method = Det_Settings.get_det_method (m);
                 return switch (cur_method) {
                     case BASIC -> det_with_basic_rules ();
                     case LAPLASS -> det_with_laplass ();
                     case SARUSS -> det_with_triangle_rule ();
-                    case GAUSS -> det_with_gauss ();
+                    case TRIANGLE -> det_with_triangle ();
                 };
             } catch (MRV.MATRIX_DIMENSION_MISSMATCH ignored) {
                 return 0;
@@ -221,13 +227,13 @@ public class Matrix extends Logger {
             switch (m) {
                 case 1 -> {
                     log_this ("Определитель матрицы из одного элемента равен этому элеменету.");
-                    Log.add ("det = " + "a00" + " = " + arr[0][0], "");
+                    Log.add ("det = " + "a11" + " = " + arr[0][0], "");
                     det = arr[0][0];
                 }
                 case 2 -> {
                     det = arr[0][0] * arr[1][1] - arr[0][1] * arr[1][0];
                     log_this ("Определитель матрицы 2 на 2 равен произведению элементов на главной минус произведение элементов на побочной диагонали.");
-                    Log.add ("det = a00*11 - a01*a10 = " + arr[0][0] + "*" + arr[1][1] + "-" + arr[0][1] + "*" + arr[1][0] + " =  " + det, "");
+                    Log.add ("det = a11*22 - a12*a21 = " + arr[0][0] + "*" + arr[1][1] + "-" + arr[0][1] + "*" + arr[1][0] + " =  " + det, "");
                 }
                 default -> throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
             }
@@ -240,18 +246,28 @@ public class Matrix extends Logger {
             double det = arr[0][0]*arr[1][1]*arr[2][2] + arr[0][1]*arr[1][2]*arr[2][0] + arr[0][2]*arr[1][0]*arr[2][1];
             det = det - arr[2][0]*arr[1][1]*arr[0][2] - arr[1][0]*arr[0][1]*arr[2][2] - arr[0][0]*arr[2][1]*arr[1][2];
             log_this ("Определитель матрицы 3 на 3 можно вычислить используя правило треугольника или способ Саррюса. ");
-            Log.add ("det = a00*a11*a22 + a01*a12*a20 + a02*a10*a21 - a20*a11*a02 - a10*a01*a22 - a00*a21*a12 =", "");
+            Log.add ("det = a11*a22*a33 + a12*a23*a31 + a13*a21*a32 - a31*a22*a13 - a21*a12*a33 - a11*a32*a23 =", "");
             Log.add ("= " + arr[0][0] + "*" + arr[1][1] + "*" + arr[2][2] + " " + arr[0][1] + "*" + arr[1][2] + "*" + arr[2][0] + " " + arr[0][2] + "*" + arr[1][0] + "*" + arr[2][1] + " -(" + arr[2][0] + "*" + arr[1][1] + "*" + arr[0][2] + " " + arr[1][0] + "*" + arr[0][1] + "*" + arr[2][2] + " " + arr[0][0] + "*" + arr[2][1] + "*" + arr[1][2] + ") =", "");
             Log.add ("= " + arr[0][0]*arr[1][1]*arr[2][2] + " + " + arr[0][1]*arr[1][2]*arr[2][0] + " + " + arr[0][2]*arr[1][0]*arr[2][1] + " + " + "-(" + arr[2][0]*arr[1][1]*arr[0][2] + " + " + arr[1][0]*arr[0][1]*arr[2][2] + " + " + arr[0][0]*arr[2][1]*arr[1][2] + ")= " + det,"");
             return det;
         }
         else throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
     }
-    public double det_with_gauss() throws MRV.INVALID_NUMBER_STRING {
+    public double det_with_triangle() throws MRV.INVALID_NUMBER_STRING {
         Matrix copy = new Matrix (arr);
-        copy.gauss_transformation ();
+        copy.triangular_transformation ();
         double det = 1;
-        for (int i = 0; i < m; i++) det*=copy.arr[i][i];
+        String temp = "det = ", temp2 = "det = ";
+        for (int i = 0; i < m; i++){
+            det*=copy.arr[i][i];
+            temp += "a" + (i+1) + (i+1) + " * ";
+            temp2 += copy.arr[i][i] + " * ";
+        }
+        temp = temp.substring (0, temp.length () - 3);
+        temp2 = temp2.substring (0, temp2.length () - 3);
+        Log.add (temp, "Так как матрица треугольного вида, то определитель равен произведению элементов на главной диагонали.");
+        Log.add (temp2, "");
+        Log.add("det = " + det, "");
         return det;
     }
     public double det_with_laplass() throws MRV.INVALID_NUMBER_STRING, MRV.NON_QUADRATIC_MATRIX {
@@ -260,40 +276,48 @@ public class Matrix extends Logger {
         double det = 0;
         double A[] = new double[m]; //массив алгебраических дополнений
         if (str[1]>=col[1]){
-            log_this ("Для подсчёта определителя будем использовать разложение в строку. Раскладываем по " + str[0] + " строке.");
+            log_this ("Для подсчёта определителя будем использовать разложение в строку. Раскладываем по " + (str[0]+1) + " строке.");
             for (int i = 0; i < n; i++) {
-                A[i] = algebraic_complement (str[0], i);
+                if (arr[str[0]][i] == 0) {
+                    Log.add ("", "Так как a" + (str[0]+1) + (i+1) + " равно нулю, то считать A" + (str[0]+1) + (i+1) + " нет необходимости.");
+                    A[i] = 0;
+                }
+                else A[i] = algebraic_complement (str[0], i);
             }
             String temp = "det = ", temp2 = "det = ", temp3 = "det =";
             for (int i = 0; i < n; i++) {
                 det += A[i] * arr[col[0]][i];
-                temp += "A" + str[0] + i + "*" + "a" + str[0] + i + " + ";
+                temp += "A" + (str[0]+1) + (i+1) + "*" + "a" + (str[0]+1) + (i+1) + " + ";
                 temp2 += " " + A[i] + "*" + arr[str[0]][i] + " + ";
                 temp3 += A[i]*arr[str[0]][i] + " + ";
             }
-            temp = temp.substring (0, temp.length () - 4);
-            temp2 = temp2.substring (0, temp2.length () - 4);
-            temp3 = temp3.substring (0, temp3.length () - 4);
+            temp = temp.substring (0, temp.length () - 3);
+            temp2 = temp2.substring (0, temp2.length () - 3);
+            temp3 = temp3.substring (0, temp3.length () - 3);
             Log.add (temp, "Для того, чтобы посчитать определитель при помощи строчки, надо вычислить сумму произведений элементов на их алгебраические дополнения.");
             Log.add (temp2, "");
             Log.add (temp3, "");
             Log.add ("det = " + det, "");
         }
         else{
-            log_this ("Для подсчёта определителя будем использовать разложение в строку. Раскладываем по " + col[0] + " столбцу.");
+            log_this ("Для подсчёта определителя будем использовать разложение в столбец. Раскладываем по " + (col[0]+1) + " столбцу.");
             for (int i = 0; i < n; i++) {
-                A[i] = algebraic_complement (i, col[0]);
+                if (arr[i][col[0]] == 0){
+                    A[i] = 0;
+                    Log.add ("", "Так как a" + (i+1) + (col[0]+1) + " равно нулю, то считать A" + (i+1) + (col[0]+1) + " нет необходимости.");
+                }
+                else A[i] = algebraic_complement (i, col[0]);
             }
             String temp = "det = ", temp2 = "det = ", temp3 = "det =";
             for (int i = 0; i < n; i++) {
                 det += A[i] * arr[i][col[0]];
-                temp += "A" + str[0] + i + "*" + "a" + col[0] + i + " + ";
+                temp += "A" + (i+1) + (col[0]+1)  + "*" + "a" + (i+1) + (col[0]+1) + " + ";
                 temp2 += " " + A[i] + "*" + arr[i][col[0]] + " + ";
                 temp3 += A[i]*arr[i][col[0]] + " + ";
             }
-            temp = temp.substring (0, temp.length () - 4);
-            temp2 = temp2.substring (0, temp2.length () - 4);
-            temp3 = temp3.substring (0, temp3.length () - 4);
+            temp = temp.substring (0, temp.length () - 3);
+            temp2 = temp2.substring (0, temp2.length () - 3);
+            temp3 = temp3.substring (0, temp3.length () - 3);
             Log.add (temp, "Для того, чтобы посчитать определитель при помощи столбца, надо вычислить сумму произведений элементов на их алгебраические дополнения.");
             Log.add (temp2, "");
             Log.add (temp3, "");
@@ -308,6 +332,17 @@ public class Matrix extends Logger {
             System.out.println (temp);
         } 
     }
+    public int rang_with_triangle() throws MRV.INVALID_NUMBER_STRING {
+        Matrix copy = new Matrix (arr);
+        copy.triangular_transformation ();
+        Log.add("", "Ранг равен количеству ненулевых элементов на главной диагонали");
+        int count = 0;
+        for (int i = 0; i < m; i++)
+        {
+            if (arr[i][i] != 0) count++;
+        }
+        return count;
+    }
 
     @Override
     public String decode_this() {
@@ -319,3 +354,4 @@ public class Matrix extends Logger {
         return decode;
     }
 }
+
