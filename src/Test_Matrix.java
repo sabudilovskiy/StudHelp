@@ -1,33 +1,34 @@
 import Logger.Log;
 import MRV.MRV;
 import Matrix.Matrix;
-import Matrix.Det_Settings;
+import Matrix.Settings;
 
 import java.util.Scanner;
 
 public class Test_Matrix {
     public static void main( String[] args ) {
         Scanner scan = new Scanner(System.in);
-        int n;
-        System.out.println("Введите m: ");
-        n = Integer.parseInt(scan.nextLine());
         int m;
-        System.out.println("Введите n: ");
+        System.out.println("Введите m: ");
         m = Integer.parseInt(scan.nextLine());
+        int n;
+        System.out.println("Введите n: ");
+        n = Integer.parseInt(scan.nextLine());
         double[][] arr = new double[m][n];
         for (int i = 0; i < m; i++){
-            String temp = "Введите " + Integer.toString (i) + " строку: ";
+            String temp = "Введите " + (i+1) + " строку: ";
             System.out.println (temp);
             String [] buffer = scan.nextLine ().split(" ");
             for (int j = 0; j < n; j++) arr[i][j] = Double.parseDouble (buffer[j]);
         }
         Matrix temp = new Matrix (arr);
+        Settings.Det.setdefaultSettings();
+        Settings.Det.setBorder (4);
         try {
-            Det_Settings.setdefaultSettings();
-            Det_Settings.setBorder (4);
-            System.out.println ("Определитель равен " + temp.determinant ());
+            temp.rank_with_minors ();
+        } catch (MRV.MATRIX_DIMENSION_MISSMATCH ignored) {
+        } finally {
             Log.print_log ();
-        } catch (MRV.INVALID_NUMBER_STRING | MRV.NON_QUADRATIC_MATRIX ignored) {
         }
     }
 }

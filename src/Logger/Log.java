@@ -1,5 +1,6 @@
 package Logger;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Log {
@@ -14,9 +15,10 @@ public class Log {
         commits.clear ();
     }
     public static void print_log(){
+        PrintWriter printWriter = new PrintWriter(System.out,true);
         for (int i = 0; i < objects.size (); i++){
-            System.out.println (commits.get (i));
-            System.out.println (objects.get (i));
+            printWriter.println (commits.get (i));
+            printWriter.println (objects.get (i));
         }
     }
 }

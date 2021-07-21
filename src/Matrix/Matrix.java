@@ -1,18 +1,30 @@
 package Matrix;
 
-import Logger.Logger;
 import Logger.Log;
+import Logger.Logger;
 import MRV.MRV;
-import Matrix.det_methods.det_methods;
+import Parameters.Det;
+import Parameters.Rank;
+
+import java.util.Arrays;
 
 public class Matrix extends Logger {
     protected double cof_det = 1;
     protected double[][] arr = new double[0][0];
+    public Matrix(){
+    }
     public Matrix( double[][] arr ){
         this.arr = arr;
         m = arr.length;
         if (m>0) n = arr[0].length;
         else n = 0;
+    }
+    //создаёт единичную матрицу n на n
+    public Matrix(int n){
+        arr = new double[n][n];
+        m = n;
+        this.n = n;
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) arr[i][j] = (i==j)?1:0;
     }
     protected int m = 0;
     protected int n = 0;
@@ -38,6 +50,7 @@ public class Matrix extends Logger {
         }
         else throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
     }
+    //прибавляем к a b
     protected void summ_strings( int a, int b, double k) throws MRV.INVALID_NUMBER_STRING {
         if (0<= a && a <= m && 0 <= b && b <= m) {
             for (int i = 0; i < n; i++) arr[a][i] += k*arr[b][i];
@@ -91,13 +104,29 @@ public class Matrix extends Logger {
     }
     protected int find_non_zero_in_column (int column, int start) throws MRV.INVALID_NUMBER_STRING {
         if (0<= column && column <= n){
-            for (int i = start + 1; i < m; i++){
+            for (int i = start; i < m; i++){
                 if (arr[i][column] != 0) return i;
             }
             return -1;
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
 
+    }
+    protected void mult_string(int a, double k) throws MRV.INVALID_NUMBER_STRING {
+        if (0<=a && a<= m){
+            for (int i = 0; i < n; i++) arr[a][i]*=k;
+            log_this ("Умножаем " + (a+1) + " строку на " + k);
+            cof_det = cof_det / k;
+        }
+        else throw new MRV.INVALID_NUMBER_STRING ();
+    }
+    protected void div_string(int a, double k) throws MRV.INVALID_NUMBER_STRING {
+        if (0<=a && a<= m){
+            for (int i = 0; i < n; i++) arr[a][i]/=k;
+            log_this ("Делим " + (a+1) + " строку на " + k);
+            cof_det = cof_det * k;
+        }
+        else throw new MRV.INVALID_NUMBER_STRING ();
     }
     public void gauss_transformation() throws MRV.INVALID_NUMBER_STRING {
         int local_m = m;
@@ -112,18 +141,24 @@ public class Matrix extends Logger {
                     double k = -arr[j][i]/arr[i][i];
                     summ_strings (j, i, k);
                 }
-                log_this ("Обнуляем " + (i+1) + " столбец при помощи сложения строчек с "  +  (i+1)  +" строчкей, умноженной на посчитанные выше коэффициенты");
             }
             else if(f==i || f==-1){
                 Log.add ("Так как " + (i+1) + " столбец выше главной диагонали уже обнулён, то ничего не делаем", "");
             }
         }
+        log_this ("Теперь и над, и под главной диагональю нули. Осталось добиться того, чтобы на главной диагонали были только единицы.");
+        for (int i = 0; i < m; i++) if (arr[i][i]!=0) div_string (i, arr[i][i]);
+    }
+    //проверяет, является ли матрица единичной в главной части(квадратной подматрице)
+    protected boolean is_single(){
+        for (int i = 0; i < m; i++) for (int j = 0; j < m; j++) if (arr[i][j] != ((i==j)?1.0:0.0)) return false;
+        return true;
     }
     public void triangular_transformation() throws MRV.INVALID_NUMBER_STRING {
         int local_m = m;
         log_this ("Для того, чтобы привести матрицу к верхнетреугольному(трапециевидному) виду необходимо постепенно, столбец за столбцом путём вычитания верхних строк из нижних добиваться появления нулей под главной диагональю.");
         for (int i = 0; i < local_m - 1; i++) {
-            int f = find_non_zero_in_column (i,i);
+            int f = find_non_zero_in_column (i,i+1);
             if (arr[i][i] != 0 && f != -1) {
                 for (int j = i + 1; j < m; j++){
                     Log.add("k" + (j+1) + "= -a" + (j+1) + (i+1) + " / a" + (i+1) + (i+1) + "=" + -arr[j][i] + " / " + arr[i][i] + " = " + -arr[j][i]/arr[i][i], "");
@@ -149,14 +184,55 @@ public class Matrix extends Logger {
             }
         }
     }
-    protected Matrix minor(int a, int b) throws MRV.INVALID_NUMBER_STRING {
-        if (0 <= a && a <= m && 0 <= b && b <= n){
+    protected Matrix complement_minor( int str, int col ) throws MRV.INVALID_NUMBER_STRING {
+        if (0 <= str && str <= m && 0 <= col && col <= n){
             Matrix copy = new Matrix (arr);
-            copy.delete_string (a);
-            copy.delete_column (b);
+            copy.delete_string (str);
+            copy.delete_column (col);
             return copy;
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
+    }
+    protected Matrix complement_minor (int[] str, int[] col) throws MRV.MATRIX_DIMENSION_MISSMATCH {
+        if (m==n && str.length == col.length){
+            int k = 0, a = 0, b = 0, m_new = m-str.length;
+            double[][] temp_arr = new double[m_new][m_new];
+            while (k < m_new*m_new){
+                boolean crossed_out = false;
+                for (int j : str)
+                    if ( a == j ) {
+                        crossed_out = true;
+                        break;
+                    }
+                if ( !crossed_out ){
+                    for (int j : col)
+                        if ( a == j ) {
+                            crossed_out = true;
+                            break;
+                        }
+                    if (!crossed_out){
+                        temp_arr[k/m_new][k%m_new] = arr[a++][b++];
+                        k++;
+                    }
+                }
+            }
+            return new Matrix (temp_arr);
+        }
+        else throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
+    }
+    protected Matrix minor(Integer[] str, Integer[] col) throws MRV.MATRIX_DIMENSION_MISSMATCH {
+        if (str.length == col.length){
+            int k = 0, a = 0, b = 0, m_new = str.length;
+            double[][] temp_arr = new double[m_new][m_new];
+            for (int i = 0; i < m && k < m_new*m_new ;i++) for (int j = 0; j < n && k < m_new*m_new; j++){
+                if (Arrays.asList (str).contains (i) && Arrays.asList (col).contains (j)){
+                    temp_arr[k/m_new][k%m_new] = arr[i][j];
+                    k++;
+                }
+            }
+            return new Matrix (temp_arr);
+        }
+        else throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
     }
     protected int count_null_in_string(int a) throws MRV.INVALID_NUMBER_STRING {
         if (0<= a && a<=m) {
@@ -196,7 +272,7 @@ public class Matrix extends Logger {
         if (0 <= a && a <= m && 0 <= b && b <= n){
             Log.add("", "Для вычисления алгебраического дополнения необходимо умножить -1 в степени суммы индексов элемента на его минор.");
             Log.add("", "Найдём A" + (a+1) + (b+1));
-            Matrix minor = minor (a, b);
+            Matrix minor = complement_minor (a, b);
             Log.add("","Получаем минор вычеркнув " + (a+1) + " строку и " + (b+1) + " столбец. Вычислим его определитель.");
             double minor_determinant = minor.determinant ();
             double value = Math.pow (-1, a + b) * minor_determinant;
@@ -208,11 +284,11 @@ public class Matrix extends Logger {
     public double determinant() throws MRV.NON_QUADRATIC_MATRIX, MRV.INVALID_NUMBER_STRING {
         if (m == n){
             try {
-                det_methods cur_method = Det_Settings.get_det_method (m);
+                Det cur_method = Settings.Det.get_det_method (m);
                 return switch (cur_method) {
                     case BASIC -> det_with_basic_rules ();
                     case LAPLASS -> det_with_laplass ();
-                    case SARUSS -> det_with_triangle_rule ();
+                    case SARUSS -> det_with_saruss_rule ();
                     case TRIANGLE -> det_with_triangle ();
                 };
             } catch (MRV.MATRIX_DIMENSION_MISSMATCH ignored) {
@@ -241,7 +317,7 @@ public class Matrix extends Logger {
         }
         else throw new MRV.NON_QUADRATIC_MATRIX ();
     }
-    public double det_with_triangle_rule() throws MRV.MATRIX_DIMENSION_MISSMATCH {
+    public double det_with_saruss_rule() throws MRV.MATRIX_DIMENSION_MISSMATCH {
         if (m==n && m==3){
             double det = arr[0][0]*arr[1][1]*arr[2][2] + arr[0][1]*arr[1][2]*arr[2][0] + arr[0][2]*arr[1][0]*arr[2][1];
             det = det - arr[2][0]*arr[1][1]*arr[0][2] - arr[1][0]*arr[0][1]*arr[2][2] - arr[0][0]*arr[2][1]*arr[1][2];
@@ -332,18 +408,91 @@ public class Matrix extends Logger {
             System.out.println (temp);
         } 
     }
-    public int rang_with_triangle() throws MRV.INVALID_NUMBER_STRING {
+    public int rank_with_triangle() throws MRV.INVALID_NUMBER_STRING {
         Matrix copy = new Matrix (arr);
         copy.triangular_transformation ();
         Log.add("", "Ранг равен количеству ненулевых элементов на главной диагонали");
         int count = 0;
         for (int i = 0; i < m; i++)
         {
-            if (arr[i][i] != 0) count++;
+            if (copy.arr[i][i] != 0) count++;
         }
         return count;
     }
-
+    public int rank_with_minors() throws MRV.MATRIX_DIMENSION_MISSMATCH {
+        log_this ("Для нахождения ранга методом окламляющих миноров необходимо найти ненулевой элемент.");
+        int a = 0, b = 0;
+        boolean end = false;
+        for (int i = 0; i < m && !end; i++) for (int j = 0; j < n && !end; j++) if (arr[i][j] != 0) {
+            a = i;
+            b = i;
+            end = true;
+        }
+        Log.add ("a" + (a+1) + (b+1) + '\u2260' + " 0 ","" );
+        Log.add("", "Теперь рассмотрим все миноры, в которые входит данный элемент.");
+        double[][] temp_arr = new double [1][1];
+        Matrix cur_minor = new Matrix (temp_arr);
+        Integer[]cur_str = new Integer[1];
+        Integer[]cur_col = new Integer[1];
+        cur_str[0] = a;
+        cur_col[0] = b;
+        end = false;
+        while (cur_minor.m < m && cur_minor.m < n){
+            end = false;
+            Integer[] temp_str = new Integer[cur_minor.m + 1];
+            Integer[] temp_col = new Integer[cur_minor.m + 1];
+            for (int k = 0; k < cur_minor.m; k++){
+                temp_str[k] = cur_str[k];
+                temp_col[k] = cur_col[k];
+            }
+            for (Integer i =0; i < m && !end; i++) for (Integer j = 0; j < n && !end; j++) if(!Arrays.asList (cur_col).contains (i) && !Arrays.asList (cur_str).contains (j)) {
+                temp_str[cur_minor.m] = i;
+                temp_col[cur_minor.m] = j;
+                Matrix minor = minor (temp_str, temp_col);
+                minor.log_this ("Проверим минор.");
+                double det = 0;
+                try {
+                    det = minor.determinant ();
+                } catch (MRV.NON_QUADRATIC_MATRIX | MRV.INVALID_NUMBER_STRING ignored) {
+                }
+                if (det!=0){
+                    cur_minor = minor;
+                    cur_minor.log_this ("Так как этот минор не равен нулю, то теперь мы будем рассматривать миноры, которые включают его");
+                    cur_str = temp_str;
+                    cur_col = temp_col;
+                    end = true;
+                }
+            }
+        }
+        cur_minor.log_this ("Этот минор является базисным.");
+        return cur_minor.m;
+    }
+    public void Transposition(){
+        double[][] new_arr = new double[n][m];
+        for (int i = 0; i < m; i++) for (int j = 0; j < n; j++) new_arr[j][i] = arr[i][j];
+        arr = new_arr;
+        int temp = n;
+        n = m;
+        m = temp;
+    }
+    public int rank() throws MRV.INVALID_NUMBER_STRING {
+        if (Settings.Rank.getSettings () == Rank.ELEMENTAL_ROW ){
+            return rank_with_triangle ();
+        }
+        else return 0;
+    }
+    public Matrix get_inverse_gauss() throws MRV.MATRIX_DIMENSION_MISSMATCH, MRV.INVALID_NUMBER_STRING, MRV.DEGENERATE_MATRIX, MRV.NON_QUADRATIC_MATRIX {
+        if (m==n){
+            Matrix single = new Matrix (m);
+            Matrix copy = new Matrix (arr);
+            AugmentedMatrix temp = new AugmentedMatrix (copy, single);
+            temp.log_this ("Чтобы найти обратную матрицу методом Гаусса необходимо дописать справа от неё единичную и методом Гаусса добиться того, чтобы слева была единичная.");
+            temp.gauss_transformation ();
+            if (temp.get_main ().is_single ()) return temp.get_augmentation ();
+            else throw new MRV.DEGENERATE_MATRIX ();
+        }
+        else throw new MRV.NON_QUADRATIC_MATRIX ();
+    }
     @Override
     public String decode_this() {
         String decode = "";
