@@ -26,6 +26,13 @@ public class Matrix extends Logger {
         this.n = n;
         for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) arr[i][j] = (i==j)?1:0;
     }
+    //создаёт матрицу вектора
+    public Matrix(double [] arr){
+        m = arr.length;
+        n = 1;
+        this.arr = new double[m][n];
+        for (int i =0; i < m; i++) this.arr[i][0] = arr[i];
+    }
     protected int m = 0;
     protected int n = 0;
     static Matrix summ(Matrix left, Matrix right) throws MRV.MATRIX_DIMENSION_MISSMATCH {
@@ -52,21 +59,21 @@ public class Matrix extends Logger {
     }
     //прибавляем к a b
     protected void summ_strings( int a, int b, double k) throws MRV.INVALID_NUMBER_STRING {
-        if (0<= a && a <= m && 0 <= b && b <= m) {
+        if (0<= a && a < m && 0 <= b && b < m) {
             for (int i = 0; i < n; i++) arr[a][i] += k*arr[b][i];
             log_this ("Прибавляем к " + (a+1) + " строке " + (b+1) + " строку, умноженную на " + k);
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected boolean is_null_string(int a) throws MRV.INVALID_NUMBER_STRING {
-        if (0<= a && a<=m){
+        if (0<= a && a<m){
             for (int i = 0; i < n; i++) if (arr[a][i] != 0) return false;
             return true;
         }
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected void swap_strings(int a, int b) throws MRV.INVALID_NUMBER_STRING {
-        if (0 <= a && a <= m && 0 <= b && b <= m) {
+        if (0 <= a && a < m && 0 <= b && b < m) {
             cof_det*=-1;
             for (int i = 0; i < n; i++) {
                 double first = arr[a][i], second = arr[b][i];
@@ -77,7 +84,7 @@ public class Matrix extends Logger {
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected void delete_string(int a){
-        if (0 <= a && a <= m){
+        if (0 <= a && a < m){
             double[][] temp = new double[m-1][n];
             for (int i = 0; i < a; i++) for (int j = 0; j < n; j++) temp[i][j] = arr[i][j];
             for (int i = a + 1; i < m; i++) for (int j = 0; j < n; j++) temp[i-1][j] = arr[i][j];
@@ -86,7 +93,7 @@ public class Matrix extends Logger {
         }
     }
     protected void delete_column(int a) throws MRV.INVALID_NUMBER_STRING {
-        if (0 <= a && a <= n){
+        if (0 <= a && a < n){
             double[][] temp = new double[m][n-1];
             for (int i = 0; i < m; i++) for (int j = 0; j < a; j++) temp[i][j] = arr[i][j];
             for (int i = 0; i < m; i++) for (int j = a + 1; j < n; j++) temp[i][j-1] = arr[i][j];
@@ -96,14 +103,14 @@ public class Matrix extends Logger {
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected void move_string_to_end(int a) throws MRV.INVALID_NUMBER_STRING {
-        if (0<=a && a <= m) {
+        if (0<=a && a < m) {
             for (int i = a; i < m-1; i++) {
                 swap_strings (i, i+1);
             }
         } else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected int find_non_zero_in_column (int column, int start) throws MRV.INVALID_NUMBER_STRING {
-        if (0<= column && column <= n){
+        if (0<= column && column < n){
             for (int i = start; i < m; i++){
                 if (arr[i][column] != 0) return i;
             }
@@ -113,7 +120,7 @@ public class Matrix extends Logger {
 
     }
     protected void mult_string(int a, double k) throws MRV.INVALID_NUMBER_STRING {
-        if (0<=a && a<= m){
+        if (0<=a && a< m){
             for (int i = 0; i < n; i++) arr[a][i]*=k;
             log_this ("Умножаем " + (a+1) + " строку на " + k);
             cof_det = cof_det / k;
@@ -121,7 +128,7 @@ public class Matrix extends Logger {
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected void div_string(int a, double k) throws MRV.INVALID_NUMBER_STRING {
-        if (0<=a && a<= m){
+        if (0<=a && a< m){
             for (int i = 0; i < n; i++) arr[a][i]/=k;
             log_this ("Делим " + (a+1) + " строку на " + k);
             cof_det = cof_det * k;
@@ -156,8 +163,9 @@ public class Matrix extends Logger {
     }
     public void triangular_transformation() throws MRV.INVALID_NUMBER_STRING {
         int local_m = m;
+        int local_n = n;
         log_this ("Для того, чтобы привести матрицу к верхнетреугольному(трапециевидному) виду необходимо постепенно, столбец за столбцом путём вычитания верхних строк из нижних добиваться появления нулей под главной диагональю.");
-        for (int i = 0; i < local_m - 1; i++) {
+        for (int i = 0; i < local_m - 1 && i < local_n - 1; i++) {
             int f = find_non_zero_in_column (i,i+1);
             if (arr[i][i] != 0 && f != -1) {
                 for (int j = i + 1; j < m; j++){
@@ -165,7 +173,6 @@ public class Matrix extends Logger {
                     double k = -arr[j][i]/arr[i][i];
                     summ_strings (j, i, k);
                 }
-
             }
             else if(f==-1){
                 Log.add ("Так как " + (i+1) + " столбец ниже главной диагонали уже обнулён, то ничего не делаем", "");
@@ -176,6 +183,8 @@ public class Matrix extends Logger {
                     move_string_to_end (i);
                     log_this ("Получилось, что " + (i+1) + " строка является нулевой. Смещаем её вниз." );
                     i--;
+                    local_m--;
+                    local_n--;
                 }
                 else{
                     swap_strings (i,f);
@@ -185,7 +194,7 @@ public class Matrix extends Logger {
         }
     }
     protected Matrix complement_minor( int str, int col ) throws MRV.INVALID_NUMBER_STRING {
-        if (0 <= str && str <= m && 0 <= col && col <= n){
+        if (0 <= str && str < m && 0 <= col && col < n){
             Matrix copy = new Matrix (arr);
             copy.delete_string (str);
             copy.delete_column (col);
@@ -234,8 +243,14 @@ public class Matrix extends Logger {
         }
         else throw new MRV.MATRIX_DIMENSION_MISSMATCH ();
     }
+    protected void reduce_null_strings() throws MRV.INVALID_NUMBER_STRING {
+        for (int i = m-1; i >= 0; i--) if(is_null_string (i)) {
+            delete_string (i);
+            Log.add("", "Вычёркиваем " + (i+1) + " строку");
+        }
+    }
     protected int count_null_in_string(int a) throws MRV.INVALID_NUMBER_STRING {
-        if (0<= a && a<=m) {
+        if (0<= a && a<m) {
             int count = 0;
             for (int i = 0; i < n; i++) if (arr[a][i] == 0) count++;
             return count;
@@ -243,7 +258,7 @@ public class Matrix extends Logger {
         else throw new MRV.INVALID_NUMBER_STRING ();
     }
     protected int count_null_in_column(int a) throws MRV.INVALID_NUMBER_STRING {
-        if (0<= a && a<=m) {
+        if (0<= a && a<m) {
             int count = 0;
             for (int i = 0; i < m; i++) if (arr[i][a] == 0) count++;
             return count;
@@ -269,7 +284,7 @@ public class Matrix extends Logger {
         return max;
     }
     protected double algebraic_complement (int a, int b) throws MRV.INVALID_NUMBER_STRING, MRV.NON_QUADRATIC_MATRIX {
-        if (0 <= a && a <= m && 0 <= b && b <= n){
+        if (0 <= a && a < m && 0 <= b && b < n){
             Log.add("", "Для вычисления алгебраического дополнения необходимо умножить -1 в степени суммы индексов элемента на его минор.");
             Log.add("", "Найдём A" + (a+1) + (b+1));
             Matrix minor = complement_minor (a, b);

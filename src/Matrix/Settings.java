@@ -1,6 +1,7 @@
 package Matrix;
 
 import MRV.MRV;
+
 public class Settings {
     public static class Det {
         private static Parameters.Det settings[] = new Parameters.Det[3];
@@ -42,4 +43,13 @@ public class Settings {
         }
     }
     public static class Inverse{}
+    public static class SLE{
+        static private Parameters.SLE Settings = Parameters.SLE.GAUSS;
+        public static Parameters.SLE getSettings() {
+            return Settings;
+        }
+        public static void setSettings( Parameters.SLE settings ) {
+            Settings = settings;
+        }
+    }
 }

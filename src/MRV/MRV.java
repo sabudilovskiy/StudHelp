@@ -157,8 +157,14 @@ public class MRV {
     public static class MATRIX_FAIL extends MATRIX_ERROR{
     }
     public static class MATRIX_DIMENSION_MISSMATCH extends MATRIX_ERROR{
+
     }
     public static class INVALID_NUMBER_STRING extends MATRIX_ERROR{
+    }
+    public static class HAVE_NOT_SOLUTIONS extends MATRIX_ERROR{}
+    public static class NON_SINGLE extends MATRIX_ERROR{
+    }
+    public static class NOT_IMPLEMENT extends Exception{
     }
 }
 
